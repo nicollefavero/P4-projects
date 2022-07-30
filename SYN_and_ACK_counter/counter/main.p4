@@ -5,6 +5,14 @@
 const bit<16> TYPE_IPV4 = 0x800;
 const bit<8> TYPE_TCP = 6;
 
+/*
+    Server IPv4 address: 10.0.2.2
+    In binary: 00001010000000000000001000000010
+    In decimal: 167772674
+*/
+
+const bit<32> SERVER_IPV4_ADDR = 167772674;
+
 /* ALTERNATIVE NAME FOR TYPES */
 typedef bit<9> egressSpec_t;    // for standard_metadata_t.egress_spec (port) of bmv2 simple switch target
 typedef bit<48> macAddr_t;
@@ -65,7 +73,7 @@ struct headers {
 }
 
 /* PARSER */
-parser Parser(packet_in packet, out headers hdr, inout metadata meta, inout standard_metadata_t standard_metadata) {
+parser CounterParser(packet_in packet, out headers hdr, inout metadata meta, inout standard_metadata_t standard_metadata) {
     state start {
         transition parse_ethernet;
     }
@@ -93,13 +101,13 @@ parser Parser(packet_in packet, out headers hdr, inout metadata meta, inout stan
 }
 
 /* CHECKSUM VERIFICATION */
-control VerifyChecksum(inout headers hdr, inout metadata meta) {
+control CounterVerifyChecksum(inout headers hdr, inout metadata meta) {
     // TODO: Ver como implementar um checksum para o que eu quero.
     apply { }
 }
 
 /* INGRESS PROCESSING */
-control Ingress(inout headers hdr,
+control CounterIngress(inout headers hdr,
                 inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
 
@@ -114,7 +122,7 @@ control Ingress(inout headers hdr,
         standard_metadata.egress_spec = port;
         hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
         hdr.ethernet.dstAddr = dstAddr;
-        hdr.ipv4.ttl = hdr.pv4.ttl - 1;
+        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
     action count_syn_and_ack() {
@@ -122,7 +130,9 @@ control Ingress(inout headers hdr,
             syn_counter = syn_counter + 1;
         }
 
-        if (hdr.tcp.ack == 1 & hdr.ipv4.dstAddr == ???)
+        if (hdr.tcp.ack == 1 && hdr.ipv4.dstAddr == SERVER_IPV4_ADDR) {
+            ack_client_counter = ack_client_counter + 1;
+        }
     }
 
     table ipv4_lpm {
@@ -141,6 +151,62 @@ control Ingress(inout headers hdr,
     }
 
     apply {
-        // TODO
+        if(hdr.ipv4.isValid()) {
+            ipv4_lpm.apply();
+
+            if(hdr.tcp.isValid()) {
+                count_syn_and_ack();
+            }
+        }
     }
 }
+
+/* EGRESS PROCESSING */
+control CounterEgress(inout headers hdr,
+               inout metadata meta,
+               inout standard_metadata_t standard_metadata) {
+    apply {}
+}
+
+/* CHECKSUM COMPUTATION */
+control CounterComputeChecksum(inout headers hdr,
+                        inout metadata meta) {
+    apply {
+        update_checksum(
+            hdr.ipv4.isValid(),
+            {
+                hdr.ipv4.version,
+                hdr.ipv4.ihl,
+                hdr.ipv4.diffserv,
+                hdr.ipv4.totalLen,
+                hdr.ipv4.identification,
+                hdr.ipv4.flags,
+                hdr.ipv4.fragOffset,
+                hdr.ipv4.ttl,
+                hdr.ipv4.protocol,
+                hdr.ipv4.srcAddr,
+                hdr.ipv4.dstAddr
+            },
+            hdr.ipv4.hdrChecksum,
+            HashAlgorithm.csum16
+        );
+    }
+}
+
+/* DEPARER */
+control CounterDeparser(packet_out packet, in headers hdr) {
+    apply {
+        packet.emit(hdr.ethernet);
+        packet.emit(hdr.ipv4);
+    }
+}
+
+/* SWITCH */
+V1Switch(
+    CounterParser(),
+    CounterVerifyChecksum(),
+    CounterIngress(),
+    CounterEgress(),
+    CounterComputeChecksum(),
+    CounterDeparser()
+) main;

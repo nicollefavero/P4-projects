@@ -12,7 +12,7 @@
     }
   },
   "switches": {
-    "sw": { "runtime_json" : "topology/sw-runtime.json" }
+    "s1": { "runtime_json" : "topology/s1-runtime.json" }
   },
   "links": [
     ["h1", "s1-p1"], ["h2", "s1-p2"]
