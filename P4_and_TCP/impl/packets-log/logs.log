@@ -1,0 +1,11 @@
+
+2022-10-11 17:46:02,503 [RECEIVER] Sniffing on eth0
+2022-10-11 17:46:19,977 [SENDER] Trying to send a packet to 10.0.2.2 with the message "first packet"
+2022-10-11 17:46:19,982 [SENDER] Packet sent to IP address 10.0.2.2
+2022-10-11 17:46:20,016 [RECEIVER] Got a packet
+2022-10-11 17:46:32,647 [SENDER] Trying to send a packet to 10.0.2.2 with the message "second packet"
+2022-10-11 17:46:32,655 [SENDER] Packet sent to IP address 10.0.2.2
+2022-10-11 17:46:32,682 [RECEIVER] Got a packet
+2022-10-11 17:46:46,632 [SENDER] Trying to send a packet to 10.0.2.2 with the message "third packet"
+2022-10-11 17:46:46,638 [SENDER] Packet sent to IP address 10.0.2.2
+2022-10-11 17:46:46,665 [RECEIVER] Got a packet
