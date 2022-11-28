@@ -1,0 +1,9 @@
+2022-10-11 18:31:01,440 [0ab89bba7f94e20e] ALPN negotiated protocol h3
+2022-10-11 18:31:01,450 [0ab89bba7f94e20e] HTTP request GET /
+2022-10-11 18:31:01,451 [RECEIVER] Pushing HTTP/3 Response
+2022-10-11 18:31:01,452 [0ab89bba7f94e20e] HTTP request GET /style.css
+2022-10-11 18:31:01,462 [RECEIVER] Sending HTTP/3 Response headers
+2022-10-11 18:31:01,463 [RECEIVER] Sending HTTP/3 Response data
+2022-10-11 18:31:01,488 [0ab89bba7f94e20e] Connection close received (code 0x100, reason )
+2022-10-11 18:31:01,490 [RECEIVER] Sending HTTP/3 Response headers
+2022-10-11 18:31:01,492 [RECEIVER] Sending HTTP/3 Response data
