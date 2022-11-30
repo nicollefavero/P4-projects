@@ -1,0 +1,6 @@
+*/build
+*/logs
+*/pcaps
+*/__pycache__
+*/utils/__pycache__
+*/utils/p4runtime_lib/__pycache__
