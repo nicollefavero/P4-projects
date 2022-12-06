@@ -40,11 +40,47 @@ header quic_initial_t {
     bit<2> packetNumberLenght;
     bit<32> version;
     bit<8> dstConnIdLength;
-    bit<160> dstConnId; // TODO it could be of "varbit" type
     bit<8> srcConnIdLength;
-    bit<160> srcConnId; // TODO it could be of "varbit" type
 }
 
+// " Destination Connection ID" field (variable-length)
+header quic_initial_dstConnId_t {
+    varbit<160> dstConnId;
+}
+
+// "Source Connection ID" field (variable-length)
+header quic_initial_srcConnId_t {
+    varbit<160> srcConnId;
+}
+
+// "Token Length" and "Token" fields (variable-length and encoded)
+header quic_initial_tokenLength_t {
+    bit<2> tokenLengthEncoded;
+    varbit<62> tokenLength;
+}
+
+header quic_initial_token_t {
+    varbit<62> token;
+}
+
+// "Length" field (variable-length and encoded): "This is the length of the
+// remainder of the packet (Packet Number + Payload) in bytes."
+header quic_initial_RemainingPacketLength_t {
+    bit<2> packetRemainingLengthEncoded;
+    bit<6> iDontKnowWhatThisBitsMean;           // TODO don't know what these bits mean
+    bit<2> packetNumberLength;                  // must add +1 to this value, it means the Packet Number length in bytes.
+    // TODO continuar daqui
+    varbit<54> packetRemainingLength;
+}
+
+// "Packet Number" field (variable-length): "This field is 1 to 4 bytes long.
+// The length of the Packet Number field is encoded in the Packet Number length
+// bits of byte 0."
+header quic_initial_packetNumber_t {
+
+}
+
+// "Packet Payload" fields (variable-length)
 
 struct metadata {
     /* empty ??? */
