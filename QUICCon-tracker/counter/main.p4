@@ -67,17 +67,15 @@ header quic_initial_token_t {
 // remainder of the packet (Packet Number + Payload) in bytes."
 header quic_initial_RemainingPacketLength_t {
     bit<2> packetRemainingLengthEncoded;
-    bit<6> iDontKnowWhatThisBitsMean;           // TODO don't know what these bits mean
-    bit<2> packetNumberLength;                  // must add +1 to this value, it means the Packet Number length in bytes.
-    // TODO continuar daqui
-    varbit<54> packetRemainingLength;
+    varbit<60> payloadLength;
+    bit<2> packetNumberLength;  // In bytes (0 - 3). Must add +1 later (1 - 4)
 }
 
 // "Packet Number" field (variable-length): "This field is 1 to 4 bytes long.
 // The length of the Packet Number field is encoded in the Packet Number length
 // bits of byte 0."
 header quic_initial_packetNumber_t {
-
+    varbit<32> packetNumber;
 }
 
 // "Packet Payload" fields (variable-length)
