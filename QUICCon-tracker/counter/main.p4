@@ -8,6 +8,7 @@ const bit<16> TYPE_IPV4 = 0x800;
 typedef bit<9> egressSpec_t;    // for standard_metadata_t.egress_spec (port) of bmv2 simple switch target
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
+typedef bit<16> udpPort_t;
 
 
 /* HEADERS */
@@ -32,12 +33,19 @@ header ipv4_t {
     ip4Addr_t dstAddr;
 }
 
+header udp_t {
+    udpPort_t srcPort;
+    udpPort_t dstPort;
+    bit<16> packetLength;
+    bit<16> checksum;
+}
+
 header quic_initial_t {
     bit<1> headerForm;
     bit<1> fixedBit;
     bit<2> longPacketType;
     bit<2> reservedBits;
-    bit<2> packetNumberLenght;
+    bit<2> packetNumberLength; // In bytes (0 - 3). Must add +1 later (1 - 4)
     bit<32> version;
     bit<8> dstConnIdLength;
     bit<8> srcConnIdLength;
@@ -65,20 +73,18 @@ header quic_initial_token_t {
 
 // "Length" field (variable-length and encoded): "This is the length of the
 // remainder of the packet (Packet Number + Payload) in bytes."
-header quic_initial_RemainingPacketLength_t {
-    bit<2> packetRemainingLengthEncoded;
-    varbit<60> payloadLength;
-    bit<2> packetNumberLength;  // In bytes (0 - 3). Must add +1 later (1 - 4)
-}
-
 // "Packet Number" field (variable-length): "This field is 1 to 4 bytes long.
 // The length of the Packet Number field is encoded in the Packet Number length
 // bits of byte 0."
-header quic_initial_packetNumber_t {
-    varbit<32> packetNumber;
+header quic_initial_RemainingPacketLength_t {
+    bit<2> packetRemainingLengthEncoded;
+    varbit<32> packetNumber;  // at least 8 bits
 }
 
 // "Packet Payload" fields (variable-length)
+header quic_initial_packetNumber_t {
+    varbit<54> payload;       // at least 8 bits
+}
 
 struct metadata {
     /* empty ??? */
