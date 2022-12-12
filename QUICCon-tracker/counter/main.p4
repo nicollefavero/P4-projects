@@ -42,11 +42,9 @@ header udp_t {
     bit<16> checksum;
 }
 
-header quic_t {
-    bit<1> headerForm; // indicates if the packet is long (1) or short header (0)
-}
-
+// we assume all packets are long header because P4 does not allow a 1-bit header :)
 header quic_long_t {
+    bit<1> headerForm; // indicates if the packet is long (1) or short header (0)
     bit<1> fixedBit; // must be set to 1 unless the packet is a VN packet (version negotiation)
     bit<2> longPacketType; // indicates if the packet is VN, Initial, 0-RTT, Handshake or Retry
     bit<2> reservedBits;
@@ -55,43 +53,44 @@ header quic_long_t {
     bit<8> dstConnIdLength;
 }
 
-// " Destination Connection ID" field (variable-length)
-header quic_dstConnId_t {
+// "Destination Connection ID" field (variable-length)
+header quic_long_dstConnId_t {
     varbit<160> dstConnId;
 }
 
 // "Source Connection ID" field (variable-length)
-header quic_srcConnIdLength_t {
+header quic_long_srcConnIdLength_t {
     bit<8> srcConnIdLength;
 }
 
-header quic_srcConnId_t {
+header quic_long_srcConnId_t {
     varbit<160> srcConnId;
-    bit<2> tokenLengthEncoded;
+    bit<8> tokenLength;
 }
 
+/*
 // "Token Length" and "Token" fields (variable-length and encoded)
 header quic_initial_tokenLength_t {
-    varbit<62> tokenLength;
+    varbit<1> tokenLength;
 }
 
 header quic_initial_token_t {
     varbit<62> token;
 }
+*/
 
 // "Length" field (variable-length and encoded): "This is the length of the
 // remainder of the packet (Packet Number + Payload) in bytes."
 // "Packet Number" field (variable-length): "This field is 1 to 4 bytes long.
 // The length of the Packet Number field is encoded in the Packet Number length
 // bits of byte 0."
-header quic_initial_RemainingPacketLength_t {
+header quic_long_length_t {
     bit<2> packetRemainingLengthEncoded;
-    varbit<32> packetNumber;  // at least 8 bits (from packetNumberLength)
+    varbit<62> packetRemainingLength; // TODO
 }
 
-// "Packet Payload" fields (variable-length)
-header quic_initial_payload_t {
-    varbit<54> payload; // at least 8 bits (from remainingLength - packetNumberLength)
+header quic_long_packetNumber_t {
+    varbit<32> packetNumber;  // worst case: 4 bytes
 }
 
 struct metadata {
@@ -102,15 +101,12 @@ struct headers {
     ethernet_t ethernet;
     ipv4_t ipv4;
     udp_t udp;
-    quic_t quic;
     quic_long_t quic_long;
-    quic_dstConnId_t quic_dstConnId;
-    quic_srcConnIdLength_t quic_srcConnIdLength;
-    quic_srcConnId_t quic_srcConnId;
-    quic_initial_tokenLength_t quic_initial_tokenLength;
-    quic_initial_token_t quic_initial_token;
-    quic_initial_RemainingPacketLength_t quic_initial_RemainingPacketLength;
-    quic_initial_payload_t quic_initial_payload;
+    quic_long_dstConnId_t quic_long_dstConnId;
+    quic_long_srcConnIdLength_t quic_long_srcConnIdLength;
+    quic_long_srcConnId_t quic_long_srcConnId;
+    quic_long_length_t quic_long_length;
+    quic_long_packetNumber_t quic_long_packetNumber;
 }
 
 /* PARSER */
@@ -137,42 +133,30 @@ parser CounterParser(packet_in packet, out headers hdr, inout metadata meta, ino
 
     state parse_udp {
         packet.extract(hdr.udp);
-        transition parse_quic;
-    }
-
-    state parse_quic {
-        packet.extract(hdr.quic);
-        transition select(hdr.quic.headerForm) {
-            // 0: parse_quic_short_h // (if we were parsing short headers too)
-            1: parse_quic_long_h;
-        }
+        transition parse_quic_long_h;
     }
 
     state parse_quic_long_h {
         packet.extract(hdr.quic_long);
-        if (hdr.quic_long.fixedBit == 1) {
-            // parse connection IDs that are variable-length
-            packet.extract(hdr.quic_dstConnId, hdr.quic_long.dstConnIdLength);
-            packet.extract(hdr.quic_srcConnIdLength);
-            packet.extract(hdr.quic_srcConnId, hdr.quic_srcConnIdLength.srcConnIdLength);
+        packet.extract(hdr.quic_long_dstConnId, (bit<32>) hdr.quic_long.dstConnIdLength);
+        packet.extract(hdr.quic_long_srcConnIdLength);
+        packet.extract(hdr.quic_long_srcConnId, (bit<32>) hdr.quic_long_srcConnIdLength.srcConnIdLength);
 
-            // transition to specific Initial packet parsing
-            trasition select(hdr.quic_long.longPacketType) {
-                QUIC_LONG_TYPE_HEADER_INITIAL: parse_quic_initial_token;
-                // other options: parse 0-RTT (0x01), Handshake (0x02), and Retry (0x03) packets.
-            }
-        } else {
-            transition reject;
-            // for when Version Negotiation packets will need to be parsed
-            //if (hdr.quic_long.version ==  32w0) {
-                //transition parse_quic_vc_packet;
-            //}
+        transition select(hdr.quic_long.longPacketType) {
+            QUIC_LONG_TYPE_HEADER_INITIAL: parse_quic_long_length;
+            // 1 - 0-RTT
+            // 2 - Handshake
+            // 3 - Retry
         }
     }
 
-    state parse_quic_initial_token {
-        packet.extract(hdr.quic_initial_tokenLength, hdr.quic_srcConnId.tokenLengthEncoded);
+    state parse_quic_long_length {
+        packet.extract
+    }
 
+    state parse_quic_long_packet_number {
+        packet.extract(hdr.quic_long_packetNumber, (bit<32>) hdr.quic_long.packetNumberLength);
+        transition accept;
     }
 }
 
