@@ -77,18 +77,19 @@ header quic_initial_tokenLength_t {
 header quic_initial_token_t {
     varbit<62> token;
 }
-*/
 
+*/
 // "Length" field (variable-length and encoded): "This is the length of the
 // remainder of the packet (Packet Number + Payload) in bytes."
 // "Packet Number" field (variable-length): "This field is 1 to 4 bytes long.
 // The length of the Packet Number field is encoded in the Packet Number length
 // bits of byte 0."
+/*
 header quic_long_length_t {
     bit<2> packetRemainingLengthEncoded;
-    varbit<62> packetRemainingLength; // TODO
+    varbit<62> packetRemainingLength;
 }
-
+*/
 header quic_long_packetNumber_t {
     varbit<32> packetNumber;  // worst case: 4 bytes
 }
@@ -100,12 +101,15 @@ struct metadata {
 struct headers {
     ethernet_t ethernet;
     ipv4_t ipv4;
+
     udp_t udp;
     quic_long_t quic_long;
     quic_long_dstConnId_t quic_long_dstConnId;
     quic_long_srcConnIdLength_t quic_long_srcConnIdLength;
     quic_long_srcConnId_t quic_long_srcConnId;
+    /*
     quic_long_length_t quic_long_length;
+    */
     quic_long_packetNumber_t quic_long_packetNumber;
 }
 
@@ -126,11 +130,11 @@ parser CounterParser(packet_in packet, out headers hdr, inout metadata meta, ino
     state parse_ipv4 {
         packet.extract(hdr.ipv4);
         transition select(hdr.ipv4.protocol) {
-            PROTOCOL_IPV4_UPD: parse_udp;
+            default: accept;
             // no default rule: all other packets rejected
         }
     }
-
+/*
     state parse_udp {
         packet.extract(hdr.udp);
         transition parse_quic_long_h;
@@ -151,13 +155,16 @@ parser CounterParser(packet_in packet, out headers hdr, inout metadata meta, ino
     }
 
     state parse_quic_long_length {
-        packet.extract
+        bit<32> remainingLength = ((((bit<32>) packet.lookahead<bit<2>>()) + 1) * 8) - 2;
+        packet.extract(hdr.quic_long_length, remainingLength);
+        transition parse_quic_long_packet_number;
     }
 
     state parse_quic_long_packet_number {
-        packet.extract(hdr.quic_long_packetNumber, (bit<32>) hdr.quic_long.packetNumberLength);
+        packet.extract(hdr.quic_long_packetNumber, (bit<32>) hdr.quic_long.packetNumberLength+1);
         transition accept;
     }
+    */
 }
 
 /* CHECKSUM VERIFICATION */
@@ -242,6 +249,17 @@ control CounterDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet);
         packet.emit(hdr.ipv4);
+
+        packet.emit(hdr.udp);
+        packet.emit(hdr.quic_long);
+
+        packet.emit(hdr.quic_long_dstConnId);
+        packet.emit(hdr.quic_long_srcConnIdLength);
+        packet.emit(hdr.quic_long_srcConnId);
+        /*
+        packet.emit(hdr.quic_long_length);
+        */
+        packet.emit(hdr.quic_long_packetNumber);
     }
 }
 
