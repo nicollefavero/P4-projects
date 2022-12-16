@@ -4,7 +4,11 @@
 /* CONSTANTS */
 const bit<16> TYPE_IPV4 = 0x800;
 const bit<8> PROTOCOL_IPV4_UPD = 8w17;
-const bit<2> QUIC_LONG_TYPE_HEADER_INITIAL = 2w0; // 0x00
+const bit<2> QUIC_LONG_TYPE_HEADER_INITIAL = 2w0;   // 0x00
+const bit<2> QUIC_LONG_TYPE_HEADER_HANDSHAKE = 2w2; // 0x00
+
+#define COUNTER_ENTRIES 8
+#define COUNTER_BIT_WIDTH 2
 
 /* ALTERNATIVE NAME FOR TYPES */
 typedef bit<9> egressSpec_t;    // for standard_metadata_t.egress_spec (port) of bmv2 simple switch target
@@ -42,55 +46,13 @@ header udp_t {
     bit<16> checksum;
 }
 
-// we assume all packets are long header because P4 does not allow a 1-bit header :)
+
 header quic_long_t {
-    bit<1> headerForm; // indicates if the packet is long (1) or short header (0)
-    bit<1> fixedBit; // must be set to 1 unless the packet is a VN packet (version negotiation)
-    bit<2> longPacketType; // indicates if the packet is VN, Initial, 0-RTT, Handshake or Retry
+    bit<1> headerForm;
+    bit<1> fixedBit;
+    bit<2> longPacketType;
     bit<2> reservedBits;
-    bit<2> packetNumberLength; // In bytes (0 - 3). Must add +1 later (1 - 4)
-    bit<32> version;
-    bit<8> dstConnIdLength;
-}
-
-// "Destination Connection ID" field (variable-length)
-header quic_long_dstConnId_t {
-    varbit<160> dstConnId;
-}
-
-// "Source Connection ID" field (variable-length)
-header quic_long_srcConnIdLength_t {
-    bit<8> srcConnIdLength;
-}
-
-header quic_long_srcConnId_t {
-    varbit<160> srcConnId;
-    //bit<8> tokenLength;
-}
-
-/*
-// "Token Length" and "Token" fields (variable-length and encoded)
-header quic_initial_tokenLength_t {
-    varbit<1> tokenLength;
-}
-
-header quic_initial_token_t {
-    varbit<62> token;
-}
-
-*/
-// "Length" field (variable-length and encoded): "This is the length of the
-// remainder of the packet (Packet Number + Payload) in bytes."
-// "Packet Number" field (variable-length): "This field is 1 to 4 bytes long.
-// The length osf the Packet Number field is encoded in the Packet Number length
-// bits of byte 0."
-
-header quic_long_length_t {
-    varbit<64> packetRemainingLength;
-}
-
-header quic_long_packetNumber_t {
-    varbit<32> packetNumber;  // worst case: 4 bytes
+    bit<2> packetNumberLength;
 }
 
 struct metadata {
@@ -102,11 +64,6 @@ struct headers {
     ipv4_t ipv4;
     udp_t udp;
     quic_long_t quic_long;
-    quic_long_dstConnId_t quic_long_dstConnId;
-    quic_long_srcConnIdLength_t quic_long_srcConnIdLength;
-    quic_long_srcConnId_t quic_long_srcConnId;
-    quic_long_length_t quic_long_length;
-    quic_long_packetNumber_t quic_long_packetNumber;
 }
 
 /* PARSER */
@@ -134,49 +91,18 @@ parser CounterParser(packet_in packet, out headers hdr, inout metadata meta, ino
 
     state parse_udp {
         packet.extract(hdr.udp);
-        transition parse_quic_long_h;
+        transition parse_quic_long;
     }
 
 
-    state parse_quic_long_h {
+    state parse_quic_long {
         packet.extract(hdr.quic_long);
-        packet.extract(hdr.quic_long_dstConnId, (bit<32>) hdr.quic_long.dstConnIdLength);
-        packet.extract(hdr.quic_long_srcConnIdLength);
-        packet.extract(hdr.quic_long_srcConnId, (bit<32>) hdr.quic_long_srcConnIdLength.srcConnIdLength);
-
-        /*
-        transition select(hdr.quic_long.longPacketType) {
-            QUIC_LONG_TYPE_HEADER_INITIAL: parse_quic_long_length;
-            // 1 - 0-RTT
-            // 2 - Handshake
-            // 3 - Retry
-        }
-        */
         transition accept;
     }
-    /*
-    state parse_register {
-        headerForm_h.write(0, hdr.quic_long.headerForm);
-        c = c + 1;
-        transition accept;
-    }
-    /*
-    state parse_quic_long_length {
-        bit<32> remainingLength = ((((bit<32>) packet.lookahead<bit<2>>()) + 1) * 8) - 2;
-        packet.extract(hdr.quic_long_length, remainingLength);
-        transition parse_quic_long_packet_number;
-    }
-
-    state parse_quic_long_packet_number {
-        packet.extract(hdr.quic_long_packetNumber, (bit<32>) hdr.quic_long.packetNumberLength+1);
-        transition accept;
-    }
-    */
 }
 
 /* CHECKSUM VERIFICATION */
 control CounterVerifyChecksum(inout headers hdr, inout metadata meta) {
-    // TODO: Ver como implementar um checksum para o que eu quero.
     apply { }
 }
 
@@ -185,14 +111,34 @@ control CounterIngress(inout headers hdr,
                 inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
 
-    register<bit<1>>(1) quic_r;
-    register<bit<1>>(1) quic_dstId_r;
-    register<bit<8>>(1) quic_srcIdLength_r;
-    register<bit<1>>(1) quic_srcId_r;
-    register<bit<1>>(1) check_r;
+    register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_1;
+    register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_2;
+    bit<32> counter_pos_one; bit<32> counter_pos_two;
+    bit<2> counter_val_one; bit<2> counter_val_two;
+    bit<1> direction;
+
+    register<bit<2>>(8) check1;
+    register<bit<2>>(8) check2;
+
 
     action drop() {
         mark_to_drop(standard_metadata);
+    }
+
+    action compute_hashes(ip4Addr_t ipAddr1, ip4Addr_t ipAddr2, udpPort_t port1, udpPort_t port2) {
+        hash(counter_pos_one,
+            HashAlgorithm.crc16,
+            (bit<32>) 0,
+            {ipAddr1, ipAddr2, port1, port2},
+            (bit<32>) COUNTER_ENTRIES
+        );
+
+        hash(counter_pos_two,
+           HashAlgorithm.crc32,
+           (bit<32>) 0,
+           {ipAddr1, ipAddr2, port1, port2},
+           (bit<32>) COUNTER_ENTRIES
+        );
     }
 
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
@@ -202,6 +148,22 @@ control CounterIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
+    action set_direction(bit<1> dir) {
+        direction = dir;
+    }
+
+    table check_ports {
+        key = {
+            standard_metadata.ingress_port: exact;
+            standard_metadata.egress_spec: exact;
+        }
+        actions = {
+            set_direction;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction();
+    }
 
     table ipv4_lpm {
         key = {
@@ -221,30 +183,29 @@ control CounterIngress(inout headers hdr,
     apply {
         if(hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
-        }
+            if(hdr.udp.isValid()) {
+                direction = 0;
+                if(check_ports.apply().hit) {
+                    if(direction == 1) {
+                        compute_hashes(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.udp.srcPort, hdr.udp.dstPort);
 
-        if(hdr.quic_long.isValid()) {
-            if (hdr.quic_long.headerForm == 1 && hdr.quic_long.longPacketType == 0) {
-                quic_r.write(0, 1);
-            }
-        }
+                        if((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_INITIAL)) {
+                            counter_1.read(counter_val_one, counter_pos_one);
+                            counter_2.read(counter_val_two, counter_pos_two);
 
-        if(hdr.quic_long_dstConnId.isValid()) {
-            if (hdr.quic_long.headerForm == 1 && hdr.quic_long.longPacketType == 0) {
-                quic_dstId_r.write(0, 1);
-            }
-        }
+                            counter_1.write(counter_pos_one, 1);
+                            counter_2.write(counter_pos_two, 1);
 
-        if(hdr.quic_long_srcConnIdLength.isValid()) {
-            if (hdr.quic_long.headerForm == 1 && hdr.quic_long.longPacketType == 0) {
-                quic_srcIdLength_r.write(0, hdr.quic_long_srcConnIdLength.srcConnIdLength);
-            }
-        }
+                            check1.write(counter_pos_one, 1);
+                            check2.write(counter_pos_two, 1);
 
-        if(hdr.quic_long_srcConnId.isValid()) {
-            check_r.write(0, 1);
-            if (hdr.quic_long.headerForm == 1 && hdr.quic_long.longPacketType == 0) {
-                quic_srcId_r.write(0, 1);
+                        } else if ((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_HANDSHAKE)) {
+
+                            counter_1.write(counter_pos_one, 2);
+                            counter_2.write(counter_pos_two, 2);
+                        }
+                    }
+                }
             }
         }
     }
@@ -290,13 +251,6 @@ control CounterDeparser(packet_out packet, in headers hdr) {
 
         packet.emit(hdr.udp);
         packet.emit(hdr.quic_long);
-        packet.emit(hdr.quic_long_dstConnId);
-        packet.emit(hdr.quic_long_srcConnIdLength);
-        packet.emit(hdr.quic_long_srcConnId);
-        /*
-        packet.emit(hdr.quic_long_length);
-        packet.emit(hdr.quic_long_packetNumber);
-        */
     }
 }
 
