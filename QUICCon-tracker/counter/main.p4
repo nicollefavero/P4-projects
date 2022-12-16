@@ -65,7 +65,7 @@ header quic_long_srcConnIdLength_t {
 
 header quic_long_srcConnId_t {
     varbit<160> srcConnId;
-    bit<8> tokenLength;
+    //bit<8> tokenLength;
 }
 
 /*
@@ -142,9 +142,9 @@ parser CounterParser(packet_in packet, out headers hdr, inout metadata meta, ino
         packet.extract(hdr.quic_long);
         packet.extract(hdr.quic_long_dstConnId, (bit<32>) hdr.quic_long.dstConnIdLength);
         packet.extract(hdr.quic_long_srcConnIdLength);
-        /*
         packet.extract(hdr.quic_long_srcConnId, (bit<32>) hdr.quic_long_srcConnIdLength.srcConnIdLength);
 
+        /*
         transition select(hdr.quic_long.longPacketType) {
             QUIC_LONG_TYPE_HEADER_INITIAL: parse_quic_long_length;
             // 1 - 0-RTT
@@ -185,8 +185,11 @@ control CounterIngress(inout headers hdr,
                 inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
 
-    register<bit<1>>(1) headerForm_h;
-    register<bit<8>>(1) srcConnIdLength_h;
+    register<bit<1>>(1) quic_r;
+    register<bit<1>>(1) quic_dstId_r;
+    register<bit<8>>(1) quic_srcIdLength_r;
+    register<bit<1>>(1) quic_srcId_r;
+    register<bit<1>>(1) check_r;
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -221,14 +224,27 @@ control CounterIngress(inout headers hdr,
         }
 
         if(hdr.quic_long.isValid()) {
-            if (hdr.quic_long.headerForm == 1) {
-                headerForm_h.write(0, hdr.quic_long.headerForm);
+            if (hdr.quic_long.headerForm == 1 && hdr.quic_long.longPacketType == 0) {
+                quic_r.write(0, 1);
+            }
+        }
+
+        if(hdr.quic_long_dstConnId.isValid()) {
+            if (hdr.quic_long.headerForm == 1 && hdr.quic_long.longPacketType == 0) {
+                quic_dstId_r.write(0, 1);
             }
         }
 
         if(hdr.quic_long_srcConnIdLength.isValid()) {
-            if (hdr.quic_long.headerForm == 1) {
-                srcConnIdLength_h.write(0, hdr.quic_long_srcConnIdLength.srcConnIdLength);
+            if (hdr.quic_long.headerForm == 1 && hdr.quic_long.longPacketType == 0) {
+                quic_srcIdLength_r.write(0, hdr.quic_long_srcConnIdLength.srcConnIdLength);
+            }
+        }
+
+        if(hdr.quic_long_srcConnId.isValid()) {
+            check_r.write(0, 1);
+            if (hdr.quic_long.headerForm == 1 && hdr.quic_long.longPacketType == 0) {
+                quic_srcId_r.write(0, 1);
             }
         }
     }
@@ -276,8 +292,8 @@ control CounterDeparser(packet_out packet, in headers hdr) {
         packet.emit(hdr.quic_long);
         packet.emit(hdr.quic_long_dstConnId);
         packet.emit(hdr.quic_long_srcConnIdLength);
-        /*
         packet.emit(hdr.quic_long_srcConnId);
+        /*
         packet.emit(hdr.quic_long_length);
         packet.emit(hdr.quic_long_packetNumber);
         */
