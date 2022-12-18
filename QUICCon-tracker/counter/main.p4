@@ -8,7 +8,8 @@ const bit<2> QUIC_LONG_TYPE_HEADER_INITIAL = 2w0;   // 0x00
 const bit<2> QUIC_LONG_TYPE_HEADER_HANDSHAKE = 2w2; // 0x00
 
 #define COUNTER_ENTRIES 8
-#define COUNTER_BIT_WIDTH 2
+#define COUNTER_BIT_WIDTH 32
+#define THRESHOLD 10
 
 /* ALTERNATIVE NAME FOR TYPES */
 typedef bit<9> egressSpec_t;    // for standard_metadata_t.egress_spec (port) of bmv2 simple switch target
@@ -45,7 +46,6 @@ header udp_t {
     bit<16> packetLength;
     bit<16> checksum;
 }
-
 
 header quic_long_t {
     bit<1> headerForm;
@@ -114,12 +114,9 @@ control CounterIngress(inout headers hdr,
     register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_1;
     register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_2;
     bit<32> counter_pos_one; bit<32> counter_pos_two;
-    bit<2> counter_val_one; bit<2> counter_val_two;
+    bit<32> counter_val_one; bit<32> counter_val_two;
     bit<1> direction;
-
-    register<bit<2>>(8) check1;
-    register<bit<2>>(8) check2;
-
+    bit<32> aux_min;
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -187,22 +184,37 @@ control CounterIngress(inout headers hdr,
                 direction = 0;
                 if(check_ports.apply().hit) {
                     if(direction == 1) {
+                        // simulating DDoS attack QUIC (volumetric): dropping the HANDSHAKE packet
                         compute_hashes(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.udp.srcPort, hdr.udp.dstPort);
 
                         if((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_INITIAL)) {
                             counter_1.read(counter_val_one, counter_pos_one);
                             counter_2.read(counter_val_two, counter_pos_two);
 
-                            counter_1.write(counter_pos_one, 1);
-                            counter_2.write(counter_pos_two, 1);
+                            counter_1.write(counter_pos_one, counter_val_one+1);
+                            counter_2.write(counter_pos_two, counter_val_two+1);
 
-                            check1.write(counter_pos_one, 1);
-                            check2.write(counter_pos_two, 1);
+                            if(counter_val_one+1 < counter_val_one+1) {
+                                aux_min = counter_val_one+1;
+                            } else {
+                                aux_min = counter_val_two+1;
+                            }
+
+                            /*
+                            if (aux_min > THRESHOLD) {
+                                drop();
+                            }
+                            */
 
                         } else if ((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_HANDSHAKE)) {
+                            drop();
+                            /*
+                            counter_1.read(counter_val_one, counter_pos_one);
+                            counter_2.read(counter_val_two, counter_pos_two);
 
-                            counter_1.write(counter_pos_one, 2);
-                            counter_2.write(counter_pos_two, 2);
+                            counter_1.write(counter_pos_one, counter_val_one-1);
+                            counter_2.write(counter_pos_two, counter_val_one-1);
+                            */
                         }
                     }
                 }
@@ -248,7 +260,6 @@ control CounterDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet);
         packet.emit(hdr.ipv4);
-
         packet.emit(hdr.udp);
         packet.emit(hdr.quic_long);
     }

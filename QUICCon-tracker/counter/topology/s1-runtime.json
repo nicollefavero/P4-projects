@@ -4,6 +4,28 @@
   "bmv2_json": "build/main.json",
   "table_entries": [
     {
+      "table": "CounterIngress.check_ports",
+      "match": {
+        "standard_metadata.ingress_port": 1,
+        "standard_metadata.egress_spec": 2
+      },
+      "action_name": "CounterIngress.set_direction",
+      "action_params": {
+        "dir": 1
+      }
+    },
+    {
+      "table": "CounterIngress.check_ports",
+      "match": {
+        "standard_metadata.ingress_port": 2,
+        "standard_metadata.egress_spec": 1
+      },
+      "action_name": "CounterIngress.set_direction",
+      "action_params": {
+        "dir": 0
+      }
+    },
+    {
       "table": "CounterIngress.ipv4_lpm",
       "default_action": true,
       "action_name": "CounterIngress.drop",

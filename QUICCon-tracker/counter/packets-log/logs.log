@@ -403,3 +403,21 @@
 2022-12-16 22:16:21,105 [238396504e30258c] Connection close received (code 0x100, reason )
 2022-12-16 22:16:21,107 [RECEIVER] Sending HTTP/3 Response headers
 2022-12-16 22:16:21,109 [RECEIVER] Sending HTTP/3 Response data
+2022-12-18 19:02:10,925 [d62a940c345adf50] ALPN negotiated protocol h3
+2022-12-18 19:02:10,948 [d62a940c345adf50] HTTP request GET /
+2022-12-18 19:02:10,950 [RECEIVER] Pushing HTTP/3 Response
+2022-12-18 19:02:10,951 [d62a940c345adf50] HTTP request GET /style.css
+2022-12-18 19:02:10,964 [RECEIVER] Sending HTTP/3 Response headers
+2022-12-18 19:02:10,968 [RECEIVER] Sending HTTP/3 Response data
+2022-12-18 19:02:10,989 [d62a940c345adf50] Connection close received (code 0x100, reason )
+2022-12-18 19:02:10,991 [RECEIVER] Sending HTTP/3 Response headers
+2022-12-18 19:02:10,994 [RECEIVER] Sending HTTP/3 Response data
+2022-12-18 19:08:47,815 [d10f54e858795aa6] ALPN negotiated protocol h3
+2022-12-18 19:08:47,830 [d10f54e858795aa6] HTTP request GET /
+2022-12-18 19:08:47,835 [RECEIVER] Pushing HTTP/3 Response
+2022-12-18 19:08:47,836 [d10f54e858795aa6] HTTP request GET /style.css
+2022-12-18 19:08:47,849 [RECEIVER] Sending HTTP/3 Response headers
+2022-12-18 19:08:47,852 [RECEIVER] Sending HTTP/3 Response data
+2022-12-18 19:08:47,875 [d10f54e858795aa6] Connection close received (code 0x100, reason )
+2022-12-18 19:08:47,883 [RECEIVER] Sending HTTP/3 Response headers
+2022-12-18 19:08:47,885 [RECEIVER] Sending HTTP/3 Response data
