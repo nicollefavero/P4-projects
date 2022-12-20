@@ -4,3 +4,5 @@
 */__pycache__
 */utils/__pycache__
 */utils/p4runtime_lib/__pycache__
+*.p4i
+*.log

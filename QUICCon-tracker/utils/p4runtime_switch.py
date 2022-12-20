@@ -135,4 +135,3 @@ class P4RuntimeSwitch(P4Switch):
             error("P4 switch {} did not start correctly.\n".format(self.name))
             exit(1)
         info("P4 switch {} has been started.\n".format(self.name))
-
