@@ -1,500 +1,630 @@
-[{
-    "timestamp": "2022-12-22 21:59:42.440771",
-    "percent": 75.0
+{
+    "timestamp": "2022-12-23 16:55:11.069348",
+    "is_running": true,
+    "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 21:59:42.942391",
-    "percent": 100.0
+    "timestamp": "2022-12-23 16:55:11.570585",
+    "is_running": true,
+    "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 21:59:43.448326",
-    "percent": 58.0
+    "timestamp": "2022-12-23 16:55:12.072296",
+    "is_running": true,
+    "percent": 12.0
 },
 {
-    "timestamp": "2022-12-22 21:59:43.951980",
-    "percent": 63.0
-},
-{
-    "timestamp": "2022-12-22 21:59:44.453281",
-    "percent": 100.0
-},
-{
-    "timestamp": "2022-12-22 21:59:44.959504",
-    "percent": 36.0
-},
-{
-    "timestamp": "2022-12-22 21:59:45.461779",
-    "percent": 41.0
-},
-{
-    "timestamp": "2022-12-22 21:59:45.963733",
-    "percent": 7.1
-},
-{
-    "timestamp": "2022-12-22 21:59:46.467015",
-    "percent": 10.3
-},
-{
-    "timestamp": "2022-12-22 21:59:46.970600",
+    "timestamp": "2022-12-23 16:55:12.573849",
+    "is_running": true,
     "percent": 4.0
 },
 {
-    "timestamp": "2022-12-22 21:59:47.480148",
-    "percent": 3.0
+    "timestamp": "2022-12-23 16:55:13.075348",
+    "is_running": true,
+    "percent": 6.0
 },
 {
-    "timestamp": "2022-12-22 21:59:47.986176",
-    "percent": 7.1
+    "timestamp": "2022-12-23 16:55:13.576691",
+    "is_running": true,
+    "percent": 14.0
 },
 {
-    "timestamp": "2022-12-22 21:59:48.513455",
+    "timestamp": "2022-12-23 16:55:14.082759",
+    "is_running": true,
+    "percent": 2.0
+},
+{
+    "timestamp": "2022-12-23 16:55:14.586039",
+    "is_running": true,
+    "percent": 9.9
+},
+{
+    "timestamp": "2022-12-23 16:55:15.088190",
+    "is_running": true,
+    "percent": 6.0
+},
+{
+    "timestamp": "2022-12-23 16:55:15.591640",
+    "is_running": true,
+    "percent": 2.0
+},
+{
+    "timestamp": "2022-12-23 16:55:16.094516",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:16.606867",
+    "is_running": true,
+    "percent": 3.9
+},
+{
+    "timestamp": "2022-12-23 16:55:17.115145",
+    "is_running": true,
+    "percent": 2.0
+},
+{
+    "timestamp": "2022-12-23 16:55:17.622908",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:18.124825",
+    "is_running": true,
+    "percent": 2.0
+},
+{
+    "timestamp": "2022-12-23 16:55:18.628266",
+    "is_running": true,
+    "percent": 2.0
+},
+{
+    "timestamp": "2022-12-23 16:55:19.130819",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:19.633929",
+    "is_running": true,
+    "percent": 4.0
+},
+{
+    "timestamp": "2022-12-23 16:55:20.137048",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:20.640403",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:21.143805",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:21.647028",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:22.150381",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:22.655662",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:23.158502",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:23.662913",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:24.166223",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:24.670160",
+    "is_running": true,
+    "percent": 4.0
+},
+{
+    "timestamp": "2022-12-23 16:55:25.186981",
+    "is_running": true,
     "percent": 1.9
 },
 {
-    "timestamp": "2022-12-22 21:59:49.022740",
+    "timestamp": "2022-12-23 16:55:25.690052",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:26.192193",
+    "is_running": true,
     "percent": 2.0
 },
 {
-    "timestamp": "2022-12-22 21:59:49.538433",
-    "percent": 8.8
+    "timestamp": "2022-12-23 16:55:26.695929",
+    "is_running": true,
+    "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 21:59:50.043274",
+    "timestamp": "2022-12-23 16:55:27.210879",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:27.711553",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:28.214591",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:28.718032",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:29.229624",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:29.731208",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:30.244130",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:30.747795",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:31.256248",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:31.760364",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:32.264162",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:32.772990",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:33.282758",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:33.784831",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:34.291914",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:34.795668",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:35.299331",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:35.803813",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:36.307668",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:36.812823",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:37.316471",
+    "is_running": true,
     "percent": 2.0
 },
 {
-    "timestamp": "2022-12-22 21:59:50.546466",
+    "timestamp": "2022-12-23 16:55:37.818188",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 21:59:51.048266",
-    "percent": 3.0
-},
-{
-    "timestamp": "2022-12-22 21:59:51.551424",
+    "timestamp": "2022-12-23 16:55:38.321707",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 21:59:52.062673",
+    "timestamp": "2022-12-23 16:55:38.825514",
+    "is_running": true,
+    "percent": 4.0
+},
+{
+    "timestamp": "2022-12-23 16:55:39.328533",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:39.831445",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:40.335404",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:40.838688",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:41.343701",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:41.846753",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:42.349824",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:42.861335",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:43.364706",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:43.874048",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:44.377369",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:44.881631",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:45.416489",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:45.923934",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:46.433737",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:46.938319",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:47.442009",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:47.945086",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:48.460758",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:48.963763",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:49.466379",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:49.978474",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:50.480885",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:50.983967",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:51.485634",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:51.996984",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:52.500216",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:53.002375",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:53.519086",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:54.054321",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:54.557887",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:55.060666",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:55.568202",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:56.073251",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:56.576254",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:57.080944",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:57.584770",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:58.087835",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:58.596647",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:59.139966",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:55:59.642283",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:56:00.144506",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:56:00.648066",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:56:01.151559",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:56:01.654594",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:56:02.186528",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:56:02.690507",
+    "is_running": true,
+    "percent": 0.0
+},
+{
+    "timestamp": "2022-12-23 16:56:03.193682",
+    "is_running": true,
     "percent": 2.0
 },
 {
-    "timestamp": "2022-12-22 21:59:52.565680",
-    "percent": 1.0
+    "timestamp": "2022-12-23 16:56:03.697012",
+    "is_running": true,
+    "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 21:59:53.082477",
-    "percent": 1.0
+    "timestamp": "2022-12-23 16:56:04.200169",
+    "is_running": true,
+    "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 21:59:53.587827",
-    "percent": 3.0
-},
-{
-    "timestamp": "2022-12-22 21:59:54.091355",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 21:59:54.615417",
-    "percent": 1.9
-},
-{
-    "timestamp": "2022-12-22 21:59:55.119870",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 21:59:55.623587",
+    "timestamp": "2022-12-23 16:56:04.702312",
+    "is_running": true,
     "percent": 2.0
 },
 {
-    "timestamp": "2022-12-22 21:59:56.128985",
-    "percent": 5.1
-},
-{
-    "timestamp": "2022-12-22 21:59:56.632375",
+    "timestamp": "2022-12-23 16:56:05.205507",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 21:59:57.135107",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 21:59:57.637826",
-    "percent": 3.0
-},
-{
-    "timestamp": "2022-12-22 21:59:58.151422",
-    "percent": 2.9
-},
-{
-    "timestamp": "2022-12-22 21:59:58.654976",
+    "timestamp": "2022-12-23 16:56:05.708218",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 21:59:59.158189",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 21:59:59.663115",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:00.184975",
+    "timestamp": "2022-12-23 16:56:06.211706",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:00.687962",
-    "percent": 3.0
-},
-{
-    "timestamp": "2022-12-22 22:00:01.192956",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:01.720408",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:02.224410",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:02.733610",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:03.268949",
-    "percent": 0.9
-},
-{
-    "timestamp": "2022-12-22 22:00:03.773141",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:04.276830",
+    "timestamp": "2022-12-23 16:56:06.714214",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:04.781215",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:05.288770",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:05.796027",
+    "timestamp": "2022-12-23 16:56:07.218385",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:06.298959",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:06.804811",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:07.331911",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:07.834452",
+    "timestamp": "2022-12-23 16:56:07.721488",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:08.348614",
+    "timestamp": "2022-12-23 16:56:08.228110",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:08.854048",
-    "percent": 8.9
-},
-{
-    "timestamp": "2022-12-22 22:00:09.371589",
-    "percent": 2.9
-},
-{
-    "timestamp": "2022-12-22 22:00:09.875914",
-    "percent": 4.9
-},
-{
-    "timestamp": "2022-12-22 22:00:10.388245",
-    "percent": 5.0
-},
-{
-    "timestamp": "2022-12-22 22:00:10.890234",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:11.410724",
+    "timestamp": "2022-12-23 16:56:08.730781",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:11.924105",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:12.467227",
-    "percent": 0.9
-},
-{
-    "timestamp": "2022-12-22 22:00:12.972617",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:13.479261",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:14.027798",
-    "percent": 1.8
-},
-{
-    "timestamp": "2022-12-22 22:00:14.538901",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:15.059596",
-    "percent": 1.9
-},
-{
-    "timestamp": "2022-12-22 22:00:15.563775",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:16.068993",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:16.573061",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:17.083661",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:17.586231",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:18.107597",
+    "timestamp": "2022-12-23 16:56:09.235048",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:18.632734",
-    "percent": 1.9
-},
-{
-    "timestamp": "2022-12-22 22:00:19.138802",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:19.651966",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:20.155236",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:20.668997",
+    "timestamp": "2022-12-23 16:56:09.748140",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:21.174671",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:21.696189",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:22.199368",
+    "timestamp": "2022-12-23 16:56:10.249636",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:22.702538",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:23.206144",
-    "percent": 3.1
-},
-{
-    "timestamp": "2022-12-22 22:00:23.710302",
-    "percent": 11.8
-},
-{
-    "timestamp": "2022-12-22 22:00:24.213619",
-    "percent": 8.0
-},
-{
-    "timestamp": "2022-12-22 22:00:24.716411",
-    "percent": 8.1
-},
-{
-    "timestamp": "2022-12-22 22:00:25.218474",
-    "percent": 5.0
-},
-{
-    "timestamp": "2022-12-22 22:00:25.732008",
+    "timestamp": "2022-12-23 16:56:10.775040",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:26.234425",
-    "percent": 8.1
-},
-{
-    "timestamp": "2022-12-22 22:00:26.737006",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:27.238634",
+    "timestamp": "2022-12-23 16:56:11.277201",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:27.741038",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:28.248018",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:28.770961",
+    "timestamp": "2022-12-23 16:56:11.778853",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:29.278386",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:29.780534",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:30.288579",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:30.791880",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:31.298450",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:31.800301",
-    "percent": 2.1
-},
-{
-    "timestamp": "2022-12-22 22:00:32.302049",
-    "percent": 3.0
-},
-{
-    "timestamp": "2022-12-22 22:00:32.804279",
+    "timestamp": "2022-12-23 16:56:12.281164",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:33.306549",
+    "timestamp": "2022-12-23 16:56:12.788183",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:33.809322",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:34.311620",
-    "percent": 3.1
-},
-{
-    "timestamp": "2022-12-22 22:00:34.813832",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:35.315837",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:35.817542",
-    "percent": 3.1
-},
-{
-    "timestamp": "2022-12-22 22:00:36.320025",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:36.822046",
+    "timestamp": "2022-12-23 16:56:13.289987",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:37.323580",
-    "percent": 2.0
-},
-{
-    "timestamp": "2022-12-22 22:00:37.825429",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:38.326751",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:38.827975",
+    "timestamp": "2022-12-23 16:56:13.797576",
+    "is_running": true,
     "percent": 0.0
 },
 {
-    "timestamp": "2022-12-22 22:00:39.329167",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:39.830735",
+    "timestamp": "2022-12-23 16:56:14.299822",
+    "is_running": true,
     "percent": 0.0
 },
-{
-    "timestamp": "2022-12-22 22:00:40.332813",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:40.836556",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:41.338866",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:41.840370",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:42.342591",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:42.844183",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:43.345743",
-    "percent": 67.7
-},
-{
-    "timestamp": "2022-12-22 22:00:43.848214",
-    "percent": 59.8
-},
-{
-    "timestamp": "2022-12-22 22:00:44.349633",
-    "percent": 1.0
-},
-{
-    "timestamp": "2022-12-22 22:00:44.853016",
-    "percent": 93.1
-},
-{
-    "timestamp": "2022-12-22 22:00:45.354531",
-    "percent": 33.7
-}]

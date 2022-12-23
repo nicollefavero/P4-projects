@@ -3,14 +3,24 @@ import matplotlib.pyplot as plt
 from matplotlib.collections import EventCollection
 import datetime
 import numpy as np
+import argparse
 
 FLOOD_PATH = "./QUIC-flood"
 TR4CK_PATH = "./QUIC-Tr4ck"
-test_case = "s2-c4-t1_0"
+BASELINE_PATH = "./baseline"
+TYPE = "cpu"
+ATTR = "percent"
 
 def load_metrics(project_path, test_case, resource):
     with open(f"{project_path}/{test_case}/server-{resource}.json", "r") as json_file:
-        return json.load(json_file)
+        full_logs = "[" + json_file.read()[:-2] + "]"
+        return (json.loads(full_logs))
+
+def load_baseline(resource):
+    with open(f"./baseline/server-{resource}.json", "r") as json_file:
+        a = json_file.read()
+        full_logs = "[" + a[:-2] + "]"
+        return json.loads(full_logs)
 
 def get_data_to_plot(data, label):
     arr = []
@@ -18,7 +28,7 @@ def get_data_to_plot(data, label):
         arr.append(item[label])
     return arr
 
-def get_timestamps(data):
+def get_times_to_plot(data):
     first = datetime.datetime.strptime(data[0]["timestamp"], '%Y-%m-%d %H:%M:%S.%f')
     last = datetime.datetime.strptime(data[-1]["timestamp"], '%Y-%m-%d %H:%M:%S.%f')
     diff = (last - first).total_seconds()
@@ -27,61 +37,237 @@ def get_timestamps(data):
     return arr
 
 def main():
-    flood_data_mem_s2 = load_metrics(FLOOD_PATH, test_case, "mem")
-    tr4ck_data_mem_s2 = load_metrics(TR4CK_PATH, test_case, "mem")
-    #flood_data_mem_s4 = load_metrics(FLOOD_PATH, "s4-c4-t1_0", "mem")
-    #tr4ck_data_mem_s4 = load_metrics(TR4CK_PATH, "s4-c4-t1_0", "mem")
+    #args = get_args()
+    #test_cases = args.cases
 
-    xdata_flood_s2 = get_timestamps(flood_data_mem_s2)
-    ydata_flood_s2 = get_data_to_plot(flood_data_mem_s2, "percent")
+    # Baseline Data
+    b_data = load_baseline(TYPE)
 
-    xdata_tr4ck_s2 = get_timestamps(tr4ck_data_mem_s2)
-    ydata_tr4ck_s2 = get_data_to_plot(tr4ck_data_mem_s2, "percent")
+    # Flood data
+    f_data_s2c2 = load_metrics(FLOOD_PATH, "s2-c2-t1_0", TYPE)
+    f_data_s4c2 = load_metrics(FLOOD_PATH, "s4-c2-t1_0", TYPE)
+    f_data_s8c2 = load_metrics(FLOOD_PATH, "s8-c2-t1_0", TYPE)
 
-    #xdata_flood_s4 = get_timestamps(flood_data_mem_s4)
-    #ydata_flood_s4 = get_data_to_plot(flood_data_mem_s4, "percent")
+    f_data_s2c4 = load_metrics(FLOOD_PATH, "s2-c4-t1_0", TYPE)
+    f_data_s4c4 = load_metrics(FLOOD_PATH, "s4-c4-t1_0", TYPE)
+    f_data_s8c4 = load_metrics(FLOOD_PATH, "s8-c4-t1_0", TYPE)
 
-    #xdata_tr4ck_s4 = get_timestamps(tr4ck_data_mem_s4)
-    #ydata_tr4ck_s4 = get_data_to_plot(tr4ck_data_mem_s4, "percent")
+    f_data_s2c8 = load_metrics(FLOOD_PATH, "s2-c8-t1_0", TYPE)
+    f_data_s4c8 = load_metrics(FLOOD_PATH, "s4-c8-t1_0", TYPE)
+    f_data_s8c8 = load_metrics(FLOOD_PATH, "s8-c8-t1_0", TYPE)
+
+    # Tr4ck data
+    t_data_s2c2 = load_metrics(TR4CK_PATH, "s2-c2-t1_0", TYPE)
+    t_data_s4c2 = load_metrics(TR4CK_PATH, "s4-c2-t1_0", TYPE)
+    t_data_s8c2 = load_metrics(TR4CK_PATH, "s8-c2-t1_0", TYPE)
+
+    t_data_s2c4 = load_metrics(TR4CK_PATH, "s2-c4-t1_0", TYPE)
+    t_data_s4c4 = load_metrics(TR4CK_PATH, "s4-c4-t1_0", TYPE)
+    t_data_s8c4 = load_metrics(TR4CK_PATH, "s8-c4-t1_0", TYPE)
+
+    t_data_s2c8 = load_metrics(TR4CK_PATH, "s2-c8-t1_0", TYPE)
+    t_data_s4c8 = load_metrics(TR4CK_PATH, "s4-c8-t1_0", TYPE)
+    t_data_s8c8 = load_metrics(TR4CK_PATH, "s8-c8-t1_0", TYPE)
+
+    # Baseline - Data in the axes
+    print("baseline")
+    b_xdata = get_times_to_plot(b_data)
+    b_ydata = get_data_to_plot(b_data, ATTR)
+
+    # Flood - Data in the axes
+    print("flood")
+    f_xdata_s2c2 = get_times_to_plot(f_data_s2c2)
+    f_ydata_s2c2 = get_data_to_plot(f_data_s2c2, ATTR)
+    f_xdata_s4c2 = get_times_to_plot(f_data_s4c2)
+    f_ydata_s4c2 = get_data_to_plot(f_data_s4c2, ATTR)
+    f_xdata_s8c2 = get_times_to_plot(f_data_s8c2)
+    f_ydata_s8c2 = get_data_to_plot(f_data_s8c2, ATTR)
+
+    f_xdata_s2c4 = get_times_to_plot(f_data_s2c4)
+    f_ydata_s2c4 = get_data_to_plot(f_data_s2c4, ATTR)
+    f_xdata_s4c4 = get_times_to_plot(f_data_s4c4)
+    f_ydata_s4c4 = get_data_to_plot(f_data_s4c4, ATTR)
+    f_xdata_s8c4 = get_times_to_plot(f_data_s8c4)
+    f_ydata_s8c4 = get_data_to_plot(f_data_s8c4, ATTR)
+
+    f_xdata_s2c8 = get_times_to_plot(f_data_s2c8)
+    f_ydata_s2c8 = get_data_to_plot(f_data_s2c8, ATTR)
+    f_xdata_s4c8 = get_times_to_plot(f_data_s4c8)
+    f_ydata_s4c8 = get_data_to_plot(f_data_s4c8, ATTR)
+    f_xdata_s8c8 = get_times_to_plot(f_data_s8c8)
+    f_ydata_s8c8 = get_data_to_plot(f_data_s8c8, ATTR)
+
+    # Tr4ck - Data in the axes
+    print("tr4ck")
+    t_xdata_s2c2 = get_times_to_plot(t_data_s2c2)
+    t_ydata_s2c2 = get_data_to_plot(t_data_s2c2, ATTR)
+    t_xdata_s4c2 = get_times_to_plot(t_data_s4c2)
+    t_ydata_s4c2 = get_data_to_plot(t_data_s4c2, ATTR)
+    t_xdata_s8c2 = get_times_to_plot(t_data_s8c2)
+    t_ydata_s8c2 = get_data_to_plot(t_data_s8c2, ATTR)
+
+    t_xdata_s2c4 = get_times_to_plot(t_data_s2c4)
+    t_ydata_s2c4 = get_data_to_plot(t_data_s2c4, ATTR)
+    t_xdata_s4c4 = get_times_to_plot(t_data_s4c4)
+    t_ydata_s4c4 = get_data_to_plot(t_data_s4c4, ATTR)
+    t_xdata_s8c4 = get_times_to_plot(t_data_s8c4)
+    t_ydata_s8c4 = get_data_to_plot(t_data_s8c4, ATTR)
+
+    t_xdata_s2c8 = get_times_to_plot(t_data_s2c8)
+    t_ydata_s2c8 = get_data_to_plot(t_data_s2c8, ATTR)
+    t_xdata_s4c8 = get_times_to_plot(t_data_s4c8)
+    t_ydata_s4c8 = get_data_to_plot(t_data_s4c8, ATTR)
+    t_xdata_s8c8 = get_times_to_plot(t_data_s8c8)
+    t_ydata_s8c8 = get_data_to_plot(t_data_s8c8, ATTR)
+
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    ax.plot(xdata_flood_s2, ydata_flood_s2, color='tab:blue')
-    ax.plot(xdata_tr4ck_s2, ydata_tr4ck_s2, color='tab:orange')
-    #ax.plot(xdata_flood_s4, ydata_flood_s4, color='tab:red')
-    #ax.plot(xdata_tr4ck_s4, ydata_tr4ck_s4, color='tab:pink')
 
-    plt.legend(["Baseline", "QUIC-Tr4ck"], loc="lower right")
+    ax.plot(b_xdata, b_ydata)
 
-    plt.ylabel('% memory', fontsize=16)
+    ax.plot(f_xdata_s2c2, f_ydata_s2c2)
+    #ax.plot(f_xdata_s4c2, f_ydata_s4c2)
+    #ax.plot(f_xdata_s8c2, f_ydata_s8c2)
+
+    #ax.plot(f_xdata_s2c4, f_ydata_s2c4)
+    #ax.plot(f_xdata_s4c4, f_ydata_s4c4)
+    #ax.plot(f_xdata_s8c4, f_ydata_s8c4)
+
+    #ax.plot(f_xdata_s2c8, f_ydata_s2c8)
+    #ax.plot(f_xdata_s4c8, f_ydata_s4c8)
+    #ax.plot(f_xdata_s8c8, f_ydata_s8c8)
+
+    ax.plot(t_xdata_s2c2, t_ydata_s2c2)
+    #ax.plot(t_xdata_s4c2, t_ydata_s4c2)
+    #ax.plot(t_xdata_s8c2, t_ydata_s8c2)
+
+    #ax.plot(t_xdata_s2c4, t_ydata_s2c4)
+    #ax.plot(t_xdata_s4c4, t_ydata_s4c4)
+    #ax.plot(t_xdata_s8c4, t_ydata_s8c4)
+
+    #ax.plot(t_xdata_s2c8, t_ydata_s2c8)
+    #ax.plot(t_xdata_s4c8, t_ydata_s4c8)
+    #ax.plot(t_xdata_s8c8, t_ydata_s8c8)
+
+    plt.legend(["Baseline",
+                "Control",
+                "QUIC-Tr4ck"], loc="lower right")
+
+    plt.ylabel(f'{TYPE} {ATTR}', fontsize=16)
     plt.xlabel('time (s)', fontsize=16)
 
     plt.xticks(fontsize = 14)
     plt.yticks(fontsize = 14)
 
-    xevents_flood_s2 = EventCollection(xdata_flood_s2, color='tab:blue', linelength=0.05)
-    xevents_tr4ck_s2 = EventCollection(xdata_tr4ck_s2, color='tab:orange', linelength=0.05)
+    # Baseline events
+    b_xevents = EventCollection(b_xdata, linelength=0.05)
+    b_xevents = EventCollection(b_ydata, linelength=0.05)
 
-    yevents_flood_s2 = EventCollection(ydata_flood_s2, color='tab:blue', linelength=0.05)
-    yevents_tr4ck_s2 = EventCollection(ydata_tr4ck_s2, color='tab:orange', linelength=0.05)
+    # Flood events
+    f_xevents_s2c2 = EventCollection(f_xdata_s2c2, linelength=0.05)
+    #f_xevents_s4c2 = EventCollection(f_xdata_s4c2, linelength=0.05)
+    #f_xevents_s8c2 = EventCollection(f_xdata_s8c2, linelength=0.05)
 
-    #xevents_flood_s4 = EventCollection(xdata_flood_s4, color='tab:red', linelength=0.05)
-    #xevents_tr4ck_s4 = EventCollection(xdata_tr4ck_s4, color='tab:pink', linelength=0.05)
+    f_yevents_s2c2 = EventCollection(f_ydata_s2c2, linelength=0.05)
+    #f_yevents_s4c2 = EventCollection(f_ydata_s4c2, linelength=0.05)
+    #f_yevents_s8c2 = EventCollection(f_ydata_s8c2, linelength=0.05)
 
-    #yevents_flood_s4 = EventCollection(ydata_flood_s4, color='tab:red', linelength=0.05)
-    #yevents_tr4ck_s4 = EventCollection(ydata_tr4ck_s4, color='tab:pink', linelength=0.05)
+    #f_xevents_s2c4 = EventCollection(f_xdata_s2c4, linelength=0.05)
+    #f_xevents_s4c4 = EventCollection(f_xdata_s4c4, linelength=0.05)
+    #f_xevents_s8c4 = EventCollection(f_xdata_s8c4, linelength=0.05)
 
-    ax.add_collection(xevents_flood_s2)
-    ax.add_collection(xevents_tr4ck_s2)
-    ax.add_collection(yevents_flood_s2)
-    ax.add_collection(yevents_tr4ck_s2)
+    #f_yevents_s2c4 = EventCollection(f_ydata_s2c4, linelength=0.05)
+    #f_yevents_s4c4 = EventCollection(f_ydata_s4c4, linelength=0.05)
+    #f_yevents_s8c4 = EventCollection(f_ydata_s8c4, linelength=0.05)
 
-    #ax.add_collection(xevents_flood_s4)
-    #ax.add_collection(xevents_tr4ck_s4)
-    #ax.add_collection(yevents_flood_s4)
-    #ax.add_collection(yevents_tr4ck_s4)
+    #f_xevents_s2c8 = EventCollection(f_xdata_s2c8, linelength=0.05)
+    #f_xevents_s4c8 = EventCollection(f_xdata_s4c8, linelength=0.05)
+    #f_xevents_s8c8 = EventCollection(f_xdata_s8c8, linelength=0.05)
 
-    plt.savefig(f"{test_case}-MEM.pdf")
+    #f_yevents_s2c8 = EventCollection(f_ydata_s2c8, linelength=0.05)
+    #f_yevents_s4c8 = EventCollection(f_ydata_s4c8, linelength=0.05)
+    #f_yevents_s8c8 = EventCollection(f_ydata_s8c8, linelength=0.05)
+
+    # Tr4ck events
+    t_xevents_s2c2 = EventCollection(t_xdata_s2c2, linelength=0.05)
+    #t_xevents_s4c2 = EventCollection(t_xdata_s4c2, linelength=0.05)
+    #t_xevents_s8c2 = EventCollection(t_xdata_s8c2, linelength=0.05)
+
+    t_yevents_s2c2 = EventCollection(t_ydata_s2c2, linelength=0.05)
+    #t_yevents_s4c2 = EventCollection(t_ydata_s4c2, linelength=0.05)
+    #t_yevents_s8c2 = EventCollection(t_ydata_s8c2, linelength=0.05)
+
+    #t_xevents_s2c4 = EventCollection(t_xdata_s2c4, linelength=0.05)
+    #t_xevents_s4c4 = EventCollection(t_xdata_s4c4, linelength=0.05)
+    #t_xevents_s8c4 = EventCollection(t_xdata_s8c4, linelength=0.05)
+
+    #t_yevents_s2c4 = EventCollection(t_ydata_s2c4, linelength=0.05)
+    #t_yevents_s4c4 = EventCollection(t_ydata_s4c4, linelength=0.05)
+    #t_yevents_s8c4 = EventCollection(t_ydata_s8c4, linelength=0.05)
+
+    #t_xevents_s2c8 = EventCollection(t_xdata_s2c8, linelength=0.05)
+    #t_xevents_s4c8 = EventCollection(t_xdata_s4c8, linelength=0.05)
+    #t_xevents_s8c8 = EventCollection(t_xdata_s8c8, linelength=0.05)
+#
+    #t_yevents_s2c8 = EventCollection(t_ydata_s2c8, linelength=0.05)
+    #t_yevents_s4c8 = EventCollection(t_ydata_s4c8, linelength=0.05)
+    #t_yevents_s8c8 = EventCollection(t_ydata_s8c8, linelength=0.05)
+
+    # Add events
+    ax.add_collection(b_xevents)
+    ax.add_collection(b_xevents)
+
+    ax.add_collection(f_xevents_s2c2)
+    #ax.add_collection(f_xevents_s4c2)
+    #ax.add_collection(f_xevents_s8c2)
+
+    ax.add_collection(f_yevents_s2c2)
+    #ax.add_collection(f_yevents_s4c2)
+    #ax.add_collection(f_yevents_s8c2)
+
+    #ax.add_collection(f_xevents_s2c4)
+    #ax.add_collection(f_xevents_s4c4)
+    #ax.add_collection(f_xevents_s8c4)
+
+    #ax.add_collection(f_yevents_s2c4)
+    #ax.add_collection(f_yevents_s4c4)
+    #ax.add_collection(f_yevents_s8c4)
+
+    #ax.add_collection(f_xevents_s2c8)
+    #ax.add_collection(f_xevents_s4c8)
+    #ax.add_collection(f_xevents_s8c8)
+
+    #ax.add_collection(f_yevents_s2c8)
+    #ax.add_collection(f_yevents_s4c8)
+    #ax.add_collection(f_yevents_s8c8)
+
+    ax.add_collection(t_xevents_s2c2)
+    #ax.add_collection(t_xevents_s4c2)
+    #ax.add_collection(t_xevents_s8c2)
+
+    ax.add_collection(t_yevents_s2c2)
+    #ax.add_collection(t_yevents_s4c2)
+    #ax.add_collection(t_yevents_s8c2)
+
+    #ax.add_collection(t_xevents_s2c4)
+    #ax.add_collection(t_xevents_s4c4)
+    #ax.add_collection(t_xevents_s8c4)
+
+    #ax.add_collection(t_yevents_s2c4)
+    #ax.add_collection(t_yevents_s4c4)
+    #ax.add_collection(t_yevents_s8c4)
+
+    #ax.add_collection(t_xevents_s2c8)
+    #ax.add_collection(t_xevents_s4c8)
+    #ax.add_collection(t_xevents_s8c8)
+
+    #ax.add_collection(t_yevents_s2c8)
+    #ax.add_collection(t_yevents_s4c8)
+    #ax.add_collection(t_yevents_s8c8)
+
+
+    plt.savefig(f"s2c2-{TYPE}.pdf")
     plt.show()
 
 if __name__=="__main__":
