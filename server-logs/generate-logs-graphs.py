@@ -6,7 +6,7 @@ import numpy as np
 
 FLOOD_PATH = "./QUIC-flood"
 TR4CK_PATH = "./QUIC-Tr4ck"
-test_case = "s4-c4-t1_0"
+test_case = "s2-c4-t1_0"
 
 def load_metrics(project_path, test_case, resource):
     with open(f"{project_path}/{test_case}/server-{resource}.json", "r") as json_file:
