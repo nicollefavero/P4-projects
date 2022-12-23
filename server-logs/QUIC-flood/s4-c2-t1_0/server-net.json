@@ -1,0 +1,630 @@
+{
+    "timestamp": "2022-12-22 21:47:23.465225",
+    "bytes_recv": 856,
+    "packets_recv": 10
+},
+{
+    "timestamp": "2022-12-22 21:47:23.967012",
+    "bytes_recv": 2178,
+    "packets_recv": 11
+},
+{
+    "timestamp": "2022-12-22 21:47:24.472198",
+    "bytes_recv": 11502,
+    "packets_recv": 19
+},
+{
+    "timestamp": "2022-12-22 21:47:24.974159",
+    "bytes_recv": 16790,
+    "packets_recv": 23
+},
+{
+    "timestamp": "2022-12-22 21:47:25.475559",
+    "bytes_recv": 20756,
+    "packets_recv": 26
+},
+{
+    "timestamp": "2022-12-22 21:47:25.977386",
+    "bytes_recv": 33976,
+    "packets_recv": 36
+},
+{
+    "timestamp": "2022-12-22 21:47:26.480786",
+    "bytes_recv": 39264,
+    "packets_recv": 40
+},
+{
+    "timestamp": "2022-12-22 21:47:26.984032",
+    "bytes_recv": 48518,
+    "packets_recv": 47
+},
+{
+    "timestamp": "2022-12-22 21:47:27.492698",
+    "bytes_recv": 52484,
+    "packets_recv": 50
+},
+{
+    "timestamp": "2022-12-22 21:47:27.996653",
+    "bytes_recv": 53806,
+    "packets_recv": 51
+},
+{
+    "timestamp": "2022-12-22 21:47:28.501556",
+    "bytes_recv": 55128,
+    "packets_recv": 52
+},
+{
+    "timestamp": "2022-12-22 21:47:29.007429",
+    "bytes_recv": 59094,
+    "packets_recv": 55
+},
+{
+    "timestamp": "2022-12-22 21:47:29.510731",
+    "bytes_recv": 60416,
+    "packets_recv": 56
+},
+{
+    "timestamp": "2022-12-22 21:47:30.014077",
+    "bytes_recv": 60416,
+    "packets_recv": 56
+},
+{
+    "timestamp": "2022-12-22 21:47:30.516518",
+    "bytes_recv": 65704,
+    "packets_recv": 60
+},
+{
+    "timestamp": "2022-12-22 21:47:31.018822",
+    "bytes_recv": 65704,
+    "packets_recv": 60
+},
+{
+    "timestamp": "2022-12-22 21:47:31.521036",
+    "bytes_recv": 67026,
+    "packets_recv": 61
+},
+{
+    "timestamp": "2022-12-22 21:47:32.024784",
+    "bytes_recv": 70992,
+    "packets_recv": 64
+},
+{
+    "timestamp": "2022-12-22 21:47:32.527993",
+    "bytes_recv": 70992,
+    "packets_recv": 64
+},
+{
+    "timestamp": "2022-12-22 21:47:33.032124",
+    "bytes_recv": 72314,
+    "packets_recv": 65
+},
+{
+    "timestamp": "2022-12-22 21:47:33.535053",
+    "bytes_recv": 72314,
+    "packets_recv": 65
+},
+{
+    "timestamp": "2022-12-22 21:47:34.039795",
+    "bytes_recv": 72314,
+    "packets_recv": 65
+},
+{
+    "timestamp": "2022-12-22 21:47:34.543255",
+    "bytes_recv": 72314,
+    "packets_recv": 65
+},
+{
+    "timestamp": "2022-12-22 21:47:35.047826",
+    "bytes_recv": 72314,
+    "packets_recv": 65
+},
+{
+    "timestamp": "2022-12-22 21:47:35.550293",
+    "bytes_recv": 72314,
+    "packets_recv": 65
+},
+{
+    "timestamp": "2022-12-22 21:47:36.060393",
+    "bytes_recv": 72314,
+    "packets_recv": 65
+},
+{
+    "timestamp": "2022-12-22 21:47:36.562804",
+    "bytes_recv": 73636,
+    "packets_recv": 66
+},
+{
+    "timestamp": "2022-12-22 21:47:37.069003",
+    "bytes_recv": 77602,
+    "packets_recv": 69
+},
+{
+    "timestamp": "2022-12-22 21:47:37.573443",
+    "bytes_recv": 77602,
+    "packets_recv": 69
+},
+{
+    "timestamp": "2022-12-22 21:47:38.081313",
+    "bytes_recv": 78924,
+    "packets_recv": 70
+},
+{
+    "timestamp": "2022-12-22 21:47:38.585252",
+    "bytes_recv": 82890,
+    "packets_recv": 73
+},
+{
+    "timestamp": "2022-12-22 21:47:39.093563",
+    "bytes_recv": 84212,
+    "packets_recv": 74
+},
+{
+    "timestamp": "2022-12-22 21:47:39.597016",
+    "bytes_recv": 84212,
+    "packets_recv": 74
+},
+{
+    "timestamp": "2022-12-22 21:47:40.105762",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:40.613807",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:41.117796",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:41.621139",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:42.124736",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:42.627826",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:43.131576",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:43.635242",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:44.137652",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:44.641313",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:45.145405",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:45.659506",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:46.162695",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:46.670746",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:47.173746",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:47.696971",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:48.204304",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:48.712697",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:49.217362",
+    "bytes_recv": 84282,
+    "packets_recv": 75
+},
+{
+    "timestamp": "2022-12-22 21:47:49.723860",
+    "bytes_recv": 89570,
+    "packets_recv": 79
+},
+{
+    "timestamp": "2022-12-22 21:47:50.227274",
+    "bytes_recv": 89570,
+    "packets_recv": 79
+},
+{
+    "timestamp": "2022-12-22 21:47:50.730890",
+    "bytes_recv": 90892,
+    "packets_recv": 80
+},
+{
+    "timestamp": "2022-12-22 21:47:51.234023",
+    "bytes_recv": 94858,
+    "packets_recv": 83
+},
+{
+    "timestamp": "2022-12-22 21:47:51.737836",
+    "bytes_recv": 94858,
+    "packets_recv": 83
+},
+{
+    "timestamp": "2022-12-22 21:47:52.243924",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:52.746983",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:53.250279",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:53.753491",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:54.267350",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:54.771003",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:55.275222",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:55.778759",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:56.284366",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:56.831188",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:57.339160",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:57.844040",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:58.347482",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:58.857807",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:59.361474",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:47:59.864542",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:00.367373",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:00.871389",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:01.373253",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:01.877868",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:02.381706",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:02.888123",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:03.391176",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:03.894224",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:04.402491",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:04.907549",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:05.410769",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:05.914300",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:06.417579",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:06.926838",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:07.438624",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:07.951308",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:08.459755",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:08.965147",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:09.492529",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:10.009744",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:10.518360",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:11.022362",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:11.547693",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:12.058957",
+    "bytes_recv": 96180,
+    "packets_recv": 84
+},
+{
+    "timestamp": "2022-12-22 21:48:12.563341",
+    "bytes_recv": 96250,
+    "packets_recv": 85
+},
+{
+    "timestamp": "2022-12-22 21:48:13.073472",
+    "bytes_recv": 96250,
+    "packets_recv": 85
+},
+{
+    "timestamp": "2022-12-22 21:48:13.580831",
+    "bytes_recv": 96250,
+    "packets_recv": 85
+},
+{
+    "timestamp": "2022-12-22 21:48:14.084046",
+    "bytes_recv": 96250,
+    "packets_recv": 85
+},
+{
+    "timestamp": "2022-12-22 21:48:14.587802",
+    "bytes_recv": 96250,
+    "packets_recv": 85
+},
+{
+    "timestamp": "2022-12-22 21:48:15.090534",
+    "bytes_recv": 97572,
+    "packets_recv": 86
+},
+{
+    "timestamp": "2022-12-22 21:48:15.597880",
+    "bytes_recv": 101538,
+    "packets_recv": 89
+},
+{
+    "timestamp": "2022-12-22 21:48:16.117298",
+    "bytes_recv": 101538,
+    "packets_recv": 89
+},
+{
+    "timestamp": "2022-12-22 21:48:16.620153",
+    "bytes_recv": 106826,
+    "packets_recv": 93
+},
+{
+    "timestamp": "2022-12-22 21:48:17.121905",
+    "bytes_recv": 106826,
+    "packets_recv": 93
+},
+{
+    "timestamp": "2022-12-22 21:48:17.624355",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:18.127289",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:18.632323",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:19.137007",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:19.644968",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:20.153377",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:20.667941",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:21.187410",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:21.689841",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:22.210588",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:22.724937",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:23.228942",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:23.732427",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:24.234621",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:24.750901",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:25.255664",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:25.757949",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:26.260252",
+    "bytes_recv": 108148,
+    "packets_recv": 94
+},
+{
+    "timestamp": "2022-12-22 21:48:26.762124",
+    "bytes_recv": 0,
+    "packets_recv": 0
+},
