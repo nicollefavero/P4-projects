@@ -17,11 +17,10 @@ def get_args():
     parser.add_argument("-i", "--input-files", type=str, nargs='+')
     parser.add_argument("-r", "--resource", type=str, default="mem")
     parser.add_argument("-a", "--attribute", type=str, default="percent")
-    parser.add_argument("-o", "--output-file", type=str, default="")
-    #parser.add_argument("-b", "--baseline", action="store_false")
-    parser.add_argument("-s", action="store_true")
-    parser.add_argument("-c", action="store_true")
-    parser.add_argument("-t", action="store_true")
+    parser.add_argument("-o", "--output-file", type=str, default="output-file")
+    parser.add_argument("-d", "--output-directory", type=str, default="output-folder")
+    parser.add_argument("-y", "--ylim", type=float, nargs='+', default=None)
+    parser.add_argument("-x", "--xlim", type=float, nargs='+', default=None)
     return parser.parse_args()
 
 
@@ -29,6 +28,7 @@ def __load_metrics(project_path, test_case, resource):
     with open(f"{project_path}/{test_case}/server-{resource}.json", "r") as json_file:
         full_logs = "[" + json_file.read()[:-2] + "]"
         return (json.loads(full_logs))
+
 
 def __load_baseline(resource):
     with open(f"./baseline/server-{resource}.json", "r") as json_file:
@@ -39,8 +39,16 @@ def __load_baseline(resource):
 
 def __get_data_to_plot(data, label):
     arr = []
-    for item in data:
-        arr.append(item[label])
+
+    if label == "vms":
+        first_value = int(data[0][label])
+
+        for item in data:
+            arr.append(int(item[label]) - first_value)
+    else:
+        for item in data:
+            arr.append(item[label])
+
     return arr
 
 
@@ -51,23 +59,6 @@ def __get_times_to_plot(data):
 
     arr = np.linspace(0, diff, len(data))
     return arr
-
-# Only works with 1 varying parameter
-def __get_varying_metric(input, s, c, t):
-    arr = input.split("-")
-    s_idx = ""
-    c_idx = ""
-    t_idx = ""
-
-    if s:
-        s_idx = arr[0][1:]
-        return s_idx
-    if c:
-        c_idx = arr[1][1:]
-        return c_idx
-    if t:
-        t_idx = arr[2][1:].replace("_", ".")
-        return t_idx
 
 
 def __colors():
@@ -109,13 +100,13 @@ def __plot_baseline(ax, resource, attribute):
     ax.add_collection(yevents)
 
 
-def plot_metrics(ax, project_path, test_case, resource, attribute, label, color, dashes=False):
+def plot_metrics(ax, project_path, test_case, resource, attribute, label, dashes=False):
     data = __load_metrics(project_path, test_case, resource)
 
     xdata = __get_times_to_plot(data)
     ydata = __get_data_to_plot(data, attribute)
 
-    line, = ax.plot(xdata, ydata, label=label, color=color)
+    line, = ax.plot(xdata, ydata, label=label)
 
     if dashes:
         line.set_dashes([2, 2, 2, 2])
@@ -129,28 +120,25 @@ def main():
     resource = args.resource
     attribute = args.attribute
     output_file = args.output_file
-    #plot_baseline = args.baseline
-    s = args.s
-    c = args.c
-    t = args.t
+    output_directory = args.output_directory
+    xlim = args.xlim
+    ylim = args.ylim
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
 
-    colors = __colors()
-
-    #if plot_baseline:
-        #__plot_baseline(ax, resource, attribute)
-
     for index, input in enumerate(input_files):
-        #diff = __get_varying_metric(input, s, c, t)
-
         if plot_flood:
-            plot_metrics(ax, FLOOD_PATH, input, resource, attribute, f"QUIC Flood", "#FFA500")
+            plot_metrics(ax, FLOOD_PATH, input, resource, attribute, f"QUIC Flood")
 
         if plot_track:
-            plot_metrics(ax, TR4CK_PATH, input, resource, attribute, f"QUIC Tr4ck", "#3CB371")
+            plot_metrics(ax, TR4CK_PATH, input, resource, attribute, f"QUIC Tr4ck")
 
+    if xlim is not None:
+        ax.set_xlim(xlim)
+
+    if ylim is not None:
+        ax.set_ylim(ylim)
 
     ax.legend(loc="lower right")
 
@@ -160,10 +148,12 @@ def main():
     plt.xticks(fontsize = 14)
     plt.yticks(fontsize = 14)
 
-    if not os.path.exists("test_01"):
-        os.makedirs("test_01")
+    plt.tight_layout()
 
-    plt.savefig(f"test_01/{output_file}.pdf")
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+    plt.savefig(f"{output_directory}/{output_file}.pdf")
     #plt.show()
 
 if __name__=="__main__":

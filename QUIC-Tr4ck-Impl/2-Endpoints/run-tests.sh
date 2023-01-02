@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in 2
+for i in 1
 do
   # Funcionou
   python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 2 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;

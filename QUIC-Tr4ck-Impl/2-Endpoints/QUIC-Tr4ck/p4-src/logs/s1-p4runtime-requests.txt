@@ -1,10 +1,10 @@
 
-[2023-01-02 17:25:21.922] /p4.v1.P4Runtime/SetForwardingPipelineConfig
+[2023-01-02 20:28:36.037] /p4.v1.P4Runtime/SetForwardingPipelineConfig
 ---
 Message too long (63681 bytes)! Skipping log...
 ---
 
-[2023-01-02 17:25:21.942] /p4.v1.P4Runtime/Write
+[2023-01-02 20:28:36.046] /p4.v1.P4Runtime/Write
 ---
 election_id {
   low: 1
@@ -40,7 +40,7 @@ updates {
 }
 ---
 
-[2023-01-02 17:25:21.945] /p4.v1.P4Runtime/Write
+[2023-01-02 20:28:36.048] /p4.v1.P4Runtime/Write
 ---
 election_id {
   low: 1
@@ -76,7 +76,7 @@ updates {
 }
 ---
 
-[2023-01-02 17:25:21.947] /p4.v1.P4Runtime/Write
+[2023-01-02 20:28:36.049] /p4.v1.P4Runtime/Write
 ---
 election_id {
   low: 1
@@ -97,7 +97,7 @@ updates {
 }
 ---
 
-[2023-01-02 17:25:21.949] /p4.v1.P4Runtime/Write
+[2023-01-02 20:28:36.050] /p4.v1.P4Runtime/Write
 ---
 election_id {
   low: 1
@@ -132,7 +132,7 @@ updates {
 }
 ---
 
-[2023-01-02 17:25:21.951] /p4.v1.P4Runtime/Write
+[2023-01-02 20:28:36.052] /p4.v1.P4Runtime/Write
 ---
 election_id {
   low: 1
