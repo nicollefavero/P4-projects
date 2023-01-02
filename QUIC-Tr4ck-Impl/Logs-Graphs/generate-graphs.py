@@ -5,6 +5,7 @@ import datetime
 import numpy as np
 import argparse
 import random
+import os
 
 FLOOD_PATH = "./QUIC-flood/test_01"
 TR4CK_PATH = "./QUIC-Tr4ck/test_01"
@@ -159,8 +160,11 @@ def main():
     plt.xticks(fontsize = 14)
     plt.yticks(fontsize = 14)
 
-    plt.savefig(f"./test_01/{output_file}.pdf")
-    plt.show()
+    if not os.path.exists("test_01"):
+        os.makedirs("test_01")
+
+    plt.savefig(f"test_01/{output_file}.pdf")
+    #plt.show()
 
 if __name__=="__main__":
     main()

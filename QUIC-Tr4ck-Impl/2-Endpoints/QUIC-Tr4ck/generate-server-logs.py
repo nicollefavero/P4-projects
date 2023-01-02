@@ -43,7 +43,7 @@ def main():
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    for x in range(200):
+    for x in range(300):
         mem_info = p.memory_info()
         mem_p = p.memory_percent()
         cpu_p = p.cpu_percent()

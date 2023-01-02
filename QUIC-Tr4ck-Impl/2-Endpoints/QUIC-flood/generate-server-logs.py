@@ -37,13 +37,17 @@ def main():
     args = get_args()
     output_folder = args.output_folder
     pid = parse_pid(args.raw_pid)
+    with open('kjnlsfdjkds.txt', 'w') as f:
+        f.write(args.raw_pid)
+        f.write("\n")
+        f.write(str(pid))
 
     p = psutil.Process(pid)
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    for x in range(200):
+    for x in range(300):
         mem_info = p.memory_info()
         mem_p = p.memory_percent()
         cpu_p = p.cpu_percent()

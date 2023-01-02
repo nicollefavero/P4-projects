@@ -1,49 +1,57 @@
 #!/bin/bash
 
-python3 ./QUIC-flood/counter/run.py -s 2 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 ./QUIC-flood/counter/run.py -s 4 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 ./QUIC-flood/counter/run.py -s 8 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 ./QUIC-flood/counter/run.py -s 16 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 ./QUIC-flood/counter/run.py -s 32 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
+for i in 2
+do
+  # Funcionou
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 2 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 4 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 8 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 16 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 32 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
 
-python3 /QUIC-flood/counter/run.py -s 2 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-flood/counter/run.py -s 4 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-flood/counter/run.py -s 8 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-flood/counter/run.py -s 16 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-flood/counter/run.py -s 32 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 2 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 4 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 8 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 16 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 32 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
 
-python3 /QUIC-flood/counter/run.py -s 2 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-flood/counter/run.py -s 4 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-flood/counter/run.py -s 8 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-flood/counter/run.py -s 16 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-flood/counter/run.py -s 32 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 2 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 4 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 8 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 16 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
 
-python3 /QUIC-Tr4ck/counter/run.py -s 2 -c 16 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 4 -c 16 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
+  # Nao funcionou
+  #python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 32 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
 
-python3 /QUIC-Tr4ck/counter/run.py -s 2 -c 32 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 4 -c 32 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-flood/test_01;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 2 -c 16 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 4 -c 16 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
 
-python3 /QUIC-Tr4ck/counter/run.py -s 2 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 4 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 8 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 16 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 32 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 2 -c 32 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-flood/run.py -s 4 -c 32 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-flood/test_0$i;
 
-python3 /QUIC-Tr4ck/counter/run.py -s 2 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 4 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 8 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 16 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 32 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 2 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 4 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 8 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 16 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 32 -c 2 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
 
-python3 /QUIC-Tr4ck/counter/run.py -s 2 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 4 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 8 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 16 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 32 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 2 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 4 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 8 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 16 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 32 -c 4 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
 
-python3 /QUIC-Tr4ck/counter/run.py -s 2 -c 16 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 4 -c 16 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 2 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 4 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 8 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 16 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
 
-python3 /QUIC-Tr4ck/counter/run.py -s 2 -c 32 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
-python3 /QUIC-Tr4ck/counter/run.py -s 4 -c 32 -t 1 -o /home/p4/Repositories/P4-projects/server-logs/QUIC-Tr4ck/test_01;
+  # Nao funcionou
+  #python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 32 -c 8 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 2 -c 16 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 4 -c 16 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 2 -c 32 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+  python3 /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck/run.py -s 4 -c 32 -t 1 -o /home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/Logs-Graphs/QUIC-Tr4ck/test_0$i;
+done

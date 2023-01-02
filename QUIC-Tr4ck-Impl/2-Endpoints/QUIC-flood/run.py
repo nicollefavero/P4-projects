@@ -17,15 +17,15 @@ class MininetProc:
 
     def run_server(self, logs=False, output_folder=None):
         self.proc.expect("mininet> ", timeout=None)
-        self.proc.sendline(f"h2 {SCRIPTS_PATH}/run-server.sh &")
+        self.proc.sendline(f"h2 python3 {SCRIPTS_PATH}/quic-src/receive.py --certificate {SCRIPTS_PATH}/quic-src/tests/ssl_cert.pem --private-key {SCRIPTS_PATH}/quic-src/tests/ssl_key.pem &")
 
         if logs:
             self.proc.expect("mininet> ", timeout=None)
-            self.proc.sendline(f"h2 python3 {SCRIPTS_PATH}/generate-server-logs.py -o {output_folder}/baseline -p \"$(jobs -l)\"")
+            self.proc.sendline(f"h2 python3 {SCRIPTS_PATH}/generate-server-logs.py -o {output_folder}/baseline -p \"$(jobs -l)\" &")
 
     def run_client(self):
         self.proc.expect("mininet> ", timeout=None)
-        self.proc.sendline(f"h1 {SCRIPTS_PATH}/run-client.sh &")
+        self.proc.sendline(f"h1 python3 {SCRIPTS_PATH}/quic-src/send.py --ca-certs {SCRIPTS_PATH}/quic-src/tests/pycacert.pem https://10.0.2.2:4433/ &")
 
     def run_server_logs(self, output_folder):
         self.proc.expect("mininet> ", timeout=None)
@@ -35,7 +35,7 @@ class MininetProc:
         if logs:
             self.run_server_logs(f"{output_folder}/s{burst_size}-c{burst_count}-t{burst_interval}".replace(".", "_"))
 
-        time.sleep(10)
+        time.sleep(3)
         # quantos bursts espacados por tempo (x segundos)
         for j in range(0, burst_count):
             # burst de pacotes (grupo de pacotes por vez)
@@ -44,7 +44,7 @@ class MininetProc:
             time.sleep(burst_interval)
 
         self.proc.expect("mininet> ", timeout=None)
-        self.proc.sendline(f"h1 {SCRIPTS_PATH}/run-client.sh")
+        self.proc.sendline(f"h1 python3 {SCRIPTS_PATH}/quic-src/send.py --ca-certs {SCRIPTS_PATH}/quic-src/tests/pycacert.pem https://10.0.2.2:4433/")
 
     def exit(self):
         self.proc.expect("mininet> ", timeout=None)
