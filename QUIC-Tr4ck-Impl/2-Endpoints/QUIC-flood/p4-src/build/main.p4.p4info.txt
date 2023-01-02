@@ -1,0 +1,98 @@
+pkg_info {
+  arch: "v1model"
+}
+tables {
+  preamble {
+    id: 45755094
+    name: "CounterIngress.check_ports"
+    alias: "check_ports"
+  }
+  match_fields {
+    id: 1
+    name: "standard_metadata.ingress_port"
+    bitwidth: 9
+    match_type: EXACT
+  }
+  match_fields {
+    id: 2
+    name: "standard_metadata.egress_spec"
+    bitwidth: 9
+    match_type: EXACT
+  }
+  action_refs {
+    id: 30310726
+  }
+  action_refs {
+    id: 21257015
+  }
+  size: 1024
+}
+tables {
+  preamble {
+    id: 48716607
+    name: "CounterIngress.ipv4_lpm"
+    alias: "ipv4_lpm"
+  }
+  match_fields {
+    id: 1
+    name: "hdr.ipv4.dstAddr"
+    bitwidth: 32
+    match_type: LPM
+  }
+  action_refs {
+    id: 19513254
+  }
+  action_refs {
+    id: 18273659
+  }
+  action_refs {
+    id: 21257015
+  }
+  size: 1024
+}
+actions {
+  preamble {
+    id: 21257015
+    name: "NoAction"
+    alias: "NoAction"
+    annotations: "@noWarn(\"unused\")"
+  }
+}
+actions {
+  preamble {
+    id: 18273659
+    name: "CounterIngress.drop"
+    alias: "drop"
+  }
+}
+actions {
+  preamble {
+    id: 19513254
+    name: "CounterIngress.ipv4_forward"
+    alias: "ipv4_forward"
+  }
+  params {
+    id: 1
+    name: "dstAddr"
+    bitwidth: 48
+  }
+  params {
+    id: 2
+    name: "port"
+    bitwidth: 9
+  }
+}
+actions {
+  preamble {
+    id: 30310726
+    name: "CounterIngress.set_direction"
+    alias: "set_direction"
+  }
+  params {
+    id: 1
+    name: "dir"
+    bitwidth: 1
+  }
+}
+type_info {
+}
