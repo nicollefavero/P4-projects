@@ -100,10 +100,11 @@ def main():
     if ylim is not None:
         ax.set_ylim(ylim)
 
-    ax.legend(loc="lower right")
+    ax.legend(loc="lower right", fontsize=18)
 
-    plt.ylabel(get_y_label(resource, attribute), fontsize=16)
-    plt.xlabel('Time (s)', fontsize=16)
+
+    plt.ylabel(get_y_label(resource, attribute), fontsize=18)
+    plt.xlabel('Time (s)', fontsize=18)
 
     plt.xticks(fontsize = 14)
     plt.yticks(fontsize = 14)
@@ -112,6 +113,7 @@ def main():
 
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
+
 
     plt.savefig(f"{output_directory}/{output_file}.pdf")
     #plt.show()

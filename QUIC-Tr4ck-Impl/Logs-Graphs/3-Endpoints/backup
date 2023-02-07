@@ -1,0 +1,19 @@
+x = np.arange(len(labels))
+  width = 0.35
+  fig, ax = plt.subplots()
+
+  diff = 0
+  for k, v in data.items():
+      rect = ax.bar(x - (diff * width/x), v, width, label=k)
+      ax.bar_label(rect, padding=3)
+
+      diff = ((diff * (-1)) + 1) if (diff > 0) else (diff * (-1))
+
+  ax.set_xlabel("Requisições por Burst")
+  ax.set_ylabel("Time (s)")
+  ax.set_xticks(x, labels)
+  ax.legend()
+
+  fig.tight_layout()
+
+  plt.show()
