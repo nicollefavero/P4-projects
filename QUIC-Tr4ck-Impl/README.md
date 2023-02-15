@@ -1,4 +1,4 @@
-# QUIC-Tr4ck
+# QUIC-Tr4ck Howto
 
 ## How the Experiments Are Organized
 There are two scenarios for the experiments: one with a topology of 2 end systems, and another with 3 end systems. In both experiments there are only one switch which all end systems are connected to. Each of these scenarios has two experiments: one without mitigation, just the QUIC flood attack, and another with the mitigation technique, the QUIC-Tr4ck.    
@@ -48,16 +48,16 @@ h1 python3 ../quic-src/send.py --ca-certs ../quic-src/tests/pycacert.pem https:/
 ```
 
 ###### We could use a for loop in the command line itself, but I couldn't make this work:
-```console
+```
 h1 for i in {1..10}; do python3 ../quic-src/send.py --ca-certs ../quic-src/tests/pycacert.pem https://10.0.2.2:4433/ &; done
 ```
 
-After all this, you should be able to see a new directory called `output-logs` with a lot of json files wih metrics about the server.
+After all this, you should be able to see a new directory called `output-logs` with the generated content.
 
 ## Running a Test Case In a Automated Way
 
 Enter in the experiment's directory:
-```console
+```
 cd QUIC-Tr4ck-Impl/2-Endpoints/QUIC-Tr4ck
 ```
 
@@ -68,32 +68,56 @@ There are a `python` script called `run.py` that runs all the steps seen previou
 * `-o` or `--output-folder` (string): it is the name of the directory where the server's logs will be placed when generated (default is `server-logs`).
 
 To simply run an attack scenario, run the command below, changing W, X, Y, and Z for the arguments you want to pass, according to the written above:
-```console
+```
 python3 run.py -s W -c X -t Y -o Z
 ```
 
-This script will compiler the `p4` program, start the Mininet environment, run all the commands we first ran manually, exits the Mininet, and clean the environment.
+This script will compiler the `p4` program, start the Mininet environment, run all the commands we first ran manually, exits the Mininet, and clean the environment. The `json` output files will be generated under the names `server-cpu.json` and `server-mem.json` in the directory `Z/sW-cX-tY_0`.
 
 ## Running a Test Suite In a Automated Way
 So, we saw that running a test case (experiment) in the automated way is simple, but it can still be tough to run a lot of them, a test suite. We recommend using a `bash` script with all the commands for all the test cases you want to run. In this way, you can leave it running it in a standardized way and go grab a cup of coffee. You do not need to restrict this `bash` script to one of the four scenarios, you can run all of them together to generate the logs for you to analyze it later.
 
 Below, a sample of how you can do it:
 
-```sh
+```bash
 #!/bin/bash
 
-PATH="/home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl/2-Endpoints"
+PATH="/home/p4/Repositories/P4-projects/QUIC-Tr4ck-Impl"
+N_SUITES = 5
 
 # Run 5 test suites
-for i in 1 2 3 4 5
+for i in `seq $N_SUITES`
 do
   # Run 4 test cases in each test suite varying the burst size parameter and fixing burst count and time interval.
   for j in 2 4 8 16
   do
     # The test suites will be organized in different directories while each test case has its parameters informations used to identify the json file with the metrics.
-    python3 $PATH/QUIC-flood/run.py -s $j -c 2 -t 1 -o $PATH/QUIC-flood/test_0$i;
+    python3 $PATH/2-Endpoints/QUIC-flood/run.py -s $j -c 2 -t 1 -o $PATH/Logs-Graphs/2-Endpoints/QUIC-flood/test_0$i;
+
+    python3 $PATH/2-Endpoints/QUIC-Tr4ck/run.py -s $j -c 2 -t 1 -o $PATH/Logs-Graphs/2-Endpoints/QUIC-Tr4ck/test_0$i;
 done    
 ```
 
-## Final Comments
-* The experiments in 3-Endpoints do not work properly
+## Generating Charts for the 2-Host Topology Experiment
+The automated way to generate basic charts are very similar to the automated way to run the test cases and the test suites, because there already a `python` script for it too.
+
+Enter the directory where all charts-related content are:
+```
+cd QUIC-Tr4ck-Impl/Logs-Graphs/2-Endpoints
+```
+The script that generate the charts requires parameters too. They are:
+* `-f` or `--flood`: to plot the QUIC-flood metrics.
+* `-k` or `--track`: to plot the QUIC-Tr4ck metrics.
+* `-i` or `--input-files` (string): which files it will get the metrics from.
+* `-r` or `--resource` (string): which measured resource is the plot about (you must pass one of the two options: `mem` or `cpu`. The default option is `mem`).
+* `-a` or `--attribute` (string): which attribute of the resource is the plot about (default is `percent`).
+* `-o` or `--output-file` (string): the name of the generated chart.
+* `-d` or `--output-directory` (string): the name of the directory where the server's logs will be placed when generated (default is `output-folder`).
+* `-x` or `--xlim` (float): the limits of the plot in axis X.
+* `-y` or `--ylim` (float): the limits of the plot in axis Y.
+
+Given this cheat sheet about the parameters of the generating chart script, you can use the script like this:
+
+```
+python3 ./generate-graphs.py -f -k -o s4-c8-t1_0 -i test_01/s4-c8-t1_0 -d vms-charts2 -a vms -y 30 70 -x 0 70;
+```
