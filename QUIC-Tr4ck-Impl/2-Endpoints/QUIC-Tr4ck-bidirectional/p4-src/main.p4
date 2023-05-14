@@ -4,12 +4,18 @@
 /* CONSTANTS */
 const bit<16> TYPE_IPV4 = 0x800;
 const bit<8> PROTOCOL_IPV4_UPD = 8w17;
+const bit<8> PROTOCOL_IPV4_TEL = 8w18; //definition for telemetry
 const bit<2> QUIC_LONG_TYPE_HEADER_INITIAL = 2w0;   // 0x00
 const bit<2> QUIC_LONG_TYPE_HEADER_HANDSHAKE = 2w2; // 0x00
 
 #define COUNTER_ENTRIES 8
 #define COUNTER_BIT_WIDTH 32
 #define THRESHOLD 10
+
+
+const bit<32> TYPE_READ = 0x0606;
+const bit<32>  TYPE_REC = 0x0608;
+const bit<32>  TYPE_BLOCK = 0x5555;
 
 /* ALTERNATIVE NAME FOR TYPES */
 typedef bit<9> egressSpec_t;    // for standard_metadata_t.egress_spec (port) of bmv2 simple switch target
@@ -55,6 +61,13 @@ header quic_long_t {
     bit<2> packetNumberLength;
 }
 
+header telemetry_t{
+    bit<32> type;
+    bit<32> sw;
+    bit<32> flowid;
+    bit<32> field;
+}
+
 struct metadata {
     /* empty ??? */
 }
@@ -64,6 +77,7 @@ struct headers {
     ipv4_t ipv4;
     udp_t udp;
     quic_long_t quic_long;
+    telemetry_t telemetry;
 }
 
 /* PARSER */
@@ -85,8 +99,14 @@ parser CounterParser(packet_in packet, out headers hdr, inout metadata meta, ino
         packet.extract(hdr.ipv4);
         transition select(hdr.ipv4.protocol) {
             PROTOCOL_IPV4_UPD: parse_udp;
+            PROTOCOL_IPV4_TEL: parse_telemetry;
             // no default rule: all other packets rejected
         }
+    }
+
+    state parse_telemetry {
+        packet.extract(hdr.telemetry);
+        transition accept;
     }
 
     state parse_udp {
@@ -149,6 +169,18 @@ control CounterIngress(inout headers hdr,
         direction = dir;
     }
 
+    action bounce_pkt() {
+        standard_metadata.egress_spec = standard_metadata.ingress_port;
+
+        bit<48> tmpEth = hdr.ethernet.dstAddr;
+        hdr.ethernet.dstAddr = hdr.ethernet.srcAddr;
+        hdr.ethernet.srcAddr = tmpEth;
+
+        bit<32> tmpIp = hdr.ipv4.dstAddr;
+        hdr.ipv4.dstAddr = hdr.ipv4.srcAddr;
+        hdr.ipv4.srcAddr = tmpIp;
+    }
+
     table check_ports {
         key = {
             standard_metadata.ingress_port: exact;
@@ -180,11 +212,14 @@ control CounterIngress(inout headers hdr,
     apply {
         if(hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
-            if(hdr.udp.isValid()) {
+            if(hdr.telemetry.isValid()) {
+                 counter_1.read(hdr.telemetry.field, hdr.telemetry.flowid);
+                 hdr.telemetry.type = TYPE_REC;
+            }
+            else if(hdr.udp.isValid()) {
                 direction = 0;
                 if(check_ports.apply().hit) {
                     if(direction == 1) {
-
                         // Computes different hashes for a given client
                         compute_hashes(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.udp.srcPort, hdr.udp.dstPort);
 
@@ -267,6 +302,7 @@ control CounterDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet);
         packet.emit(hdr.ipv4);
+        packet.emit(hdr.telemetry);
         packet.emit(hdr.udp);
         packet.emit(hdr.quic_long);
     }
