@@ -13,9 +13,10 @@ const bit<2> QUIC_LONG_TYPE_HEADER_HANDSHAKE = 2w2; // 0x00
 #define THRESHOLD 10
 
 
-const bit<32> TYPE_READ = 0x0606;
-const bit<32>  TYPE_REC = 0x0608;
-const bit<32>  TYPE_BLOCK = 0x5555;
+const bit<32> TYPE_READ = 0x0606
+const bit<32> TYPE_SNAPSHOT = 0x0607
+const bit<32> TYPE_UPDATE = 0x0608
+const bit<32> TYPE_EXPORT = 0x0609
 
 /* ALTERNATIVE NAME FOR TYPES */
 typedef bit<9> egressSpec_t;    // for standard_metadata_t.egress_spec (port) of bmv2 simple switch target
@@ -213,8 +214,13 @@ control CounterIngress(inout headers hdr,
         if(hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
             if(hdr.telemetry.isValid()) {
-                 counter_1.read(hdr.telemetry.field, hdr.telemetry.flowid);
-                 hdr.telemetry.type = TYPE_REC;
+                 if(hdr.telemetry.type == TYPE_READ){
+                     counter_1.read(hdr.telemetry.field, hdr.telemetry.flowid);
+                     hdr.telemetry.type = TYPE_EXPORT;
+                 }
+                 if(hdr.telemetry.type == TYPE_UPDATE){
+                     counter_1.write()
+                 }
             }
             else if(hdr.udp.isValid()) {
                 direction = 0;
@@ -242,10 +248,7 @@ control CounterIngress(inout headers hdr,
                                 counter_1.write(counter_pos_one, counter_val_one+1);
                                 counter_2.write(counter_pos_two, counter_val_two+1);
                             }
-
-
                         } else if ((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_HANDSHAKE)) {
-
                             // When a HANDSHAKE packet is received from the client, decrement the sketch
                             counter_1.read(counter_val_one, counter_pos_one);
                             counter_2.read(counter_val_two, counter_pos_two);
@@ -256,9 +259,9 @@ control CounterIngress(inout headers hdr,
                     }
 
                     // Drop packets from server
-                    if(direction == 0) {
-                        drop();
-                    }
+                    //if(direction == 0) {
+                    //    drop();
+                    //}
                 }
             }
         }
