@@ -16,8 +16,6 @@ TYPE_SNAPSHOT = 0x0607
 TYPE_UPDATE = 0x0608
 TYPE_EXPORT = 0x0609
 
-TYPE_REC = 0x0609
-TYPE_BLOCK = 0x5555
 
 iface = 'eth0'
 iface2 = 'h3-eth1'
@@ -72,7 +70,7 @@ def handle_pkt(pkt):
         print("Got a warning!")
         save_snapshot(pkt)
         send_read_snapshot(pkt)
-    elif(pkt[TelemetryHeader].type == TYPE_EXPORT)
+    elif(pkt[TelemetryHeader].type == TYPE_EXPORT):
         save_snapshot(pkt)
         if((snapshot_s2[pkt[TelemetryHeader].flowid] + snapshot_s1[pkt[TelemetryHeader].flowid]) > 10):
             print("warning")
