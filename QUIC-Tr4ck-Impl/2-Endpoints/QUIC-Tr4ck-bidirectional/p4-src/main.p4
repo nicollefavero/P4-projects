@@ -1,6 +1,16 @@
 #include <core.p4>
 #include <v1model.p4>
 
+
+/* Define constants for types of packets */
+#define PKT_INSTANCE_TYPE_NORMAL 0
+#define PKT_INSTANCE_TYPE_INGRESS_CLONE 1
+#define PKT_INSTANCE_TYPE_EGRESS_CLONE 2
+#define PKT_INSTANCE_TYPE_COALESCED 3
+#define PKT_INSTANCE_TYPE_INGRESS_RECIRC 4
+#define PKT_INSTANCE_TYPE_REPLICATION 5
+#define PKT_INSTANCE_TYPE_RESUBMIT 6
+
 /* CONSTANTS */
 const bit<16> TYPE_IPV4 = 0x800;
 const bit<8> PROTOCOL_IPV4_UPD = 8w17;
@@ -182,6 +192,12 @@ control CounterIngress(inout headers hdr,
         hdr.ipv4.srcAddr = tmpIp;
     }
 
+    action clone_packet() {
+        const bit<32> REPORT_MIRROR_SESSION_ID = 500;
+        // Clone from ingress to egress pipeline
+        clone(CloneType.I2E, REPORT_MIRROR_SESSION_ID);
+    }
+
     table check_ports {
         key = {
             standard_metadata.ingress_port: exact;
@@ -219,7 +235,7 @@ control CounterIngress(inout headers hdr,
                      hdr.telemetry.type = TYPE_EXPORT;
                  }
                  if(hdr.telemetry.type == TYPE_UPDATE){
-                     counter_1.write()
+                     counter_1.write(hdr.telemetry.flowid, hdr.telemetry.field);
                  }
             }
             else if(hdr.udp.isValid()) {
@@ -240,14 +256,20 @@ control CounterIngress(inout headers hdr,
                             }
 
                             // Limits the number of packets coming from the same client
+                            // This is the second threshold
+
                             if (aux_min > THRESHOLD) {
                                 drop();
                             } else {
-
                                 // If the threshold is not passed, forward the packet and increment the sketch
                                 counter_1.write(counter_pos_one, counter_val_one+1);
                                 counter_2.write(counter_pos_two, counter_val_two+1);
                             }
+
+                            if (aux_min > THRESHOLD_WARNING){
+                                clone_packet();
+                            }
+
                         } else if ((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_HANDSHAKE)) {
                             // When a HANDSHAKE packet is received from the client, decrement the sketch
                             counter_1.read(counter_val_one, counter_pos_one);
@@ -272,7 +294,15 @@ control CounterIngress(inout headers hdr,
 control CounterEgress(inout headers hdr,
                inout metadata meta,
                inout standard_metadata_t standard_metadata) {
-    apply {}
+    apply {
+
+      if (standard_metadata.instance_type == PKT_INSTANCE_TYPE_INGRESS_CLONE) {
+          hdr.telemetry.setValid();
+          hdr.telemetry.type = TYPE_SNAPSHOT;
+          //TODO: take snapshot
+      }
+
+    }
 }
 
 /* CHECKSUM COMPUTATION */
