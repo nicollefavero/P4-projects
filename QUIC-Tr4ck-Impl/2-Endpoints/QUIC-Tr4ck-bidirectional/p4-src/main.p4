@@ -21,12 +21,13 @@ const bit<2> QUIC_LONG_TYPE_HEADER_HANDSHAKE = 2w2; // 0x00
 #define COUNTER_ENTRIES 8
 #define COUNTER_BIT_WIDTH 32
 #define THRESHOLD 10
+#define THRESHOLD_WARNING 5
 
 
-const bit<32> TYPE_READ = 0x0606
-const bit<32> TYPE_SNAPSHOT = 0x0607
-const bit<32> TYPE_UPDATE = 0x0608
-const bit<32> TYPE_EXPORT = 0x0609
+const bit<32> TYPE_READ = 0x0606;
+const bit<32> TYPE_SNAPSHOT = 0x0607;
+const bit<32> TYPE_UPDATE = 0x0608;
+const bit<32> TYPE_EXPORT = 0x0609;
 
 /* ALTERNATIVE NAME FOR TYPES */
 typedef bit<9> egressSpec_t;    // for standard_metadata_t.egress_spec (port) of bmv2 simple switch target
