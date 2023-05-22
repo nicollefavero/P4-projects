@@ -7,7 +7,7 @@
       "table": "CounterIngress.check_ports",
       "match": {
         "standard_metadata.ingress_port": 1,
-        "standard_metadata.egress_spec": 2
+        "standard_metadata.egress_spec": 3
       },
       "action_name": "CounterIngress.set_direction",
       "action_params": {

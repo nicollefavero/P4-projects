@@ -83,7 +83,7 @@ def receive(iface):
     print("sniffing on %s" % iface)
 
     build_lfilter = lambda r: TelemetryHeader in r and (r[TelemetryHeader].type == TYPE_SNAPSHOT or r[TelemetryHeader].type == TYPE_EXPORT)
-
+    print("--- pkt from switch")
     sniff(lfilter=build_lfilter, iface = iface,
           prn = lambda x: handle_pkt(x))
 

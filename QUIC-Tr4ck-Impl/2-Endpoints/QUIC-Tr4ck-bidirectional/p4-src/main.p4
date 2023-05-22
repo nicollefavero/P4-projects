@@ -18,6 +18,8 @@ const bit<8> PROTOCOL_IPV4_TEL = 8w18; //definition for telemetry
 const bit<2> QUIC_LONG_TYPE_HEADER_INITIAL = 2w0;   // 0x00
 const bit<2> QUIC_LONG_TYPE_HEADER_HANDSHAKE = 2w2; // 0x00
 
+//const bit<5> QUIC_LONG_TYPE_HEADER_HANDSHAKE_DONE = 5w30; //0x1e
+
 #define COUNTER_ENTRIES 8
 #define COUNTER_BIT_WIDTH 32
 #define THRESHOLD 10
@@ -153,7 +155,7 @@ control CounterIngress(inout headers hdr,
     action drop() {
         mark_to_drop(standard_metadata);
     }
-
+    /*
     action compute_hashes(ip4Addr_t ipAddr1, ip4Addr_t ipAddr2, udpPort_t port1, udpPort_t port2) {
         hash(counter_pos_one,
             HashAlgorithm.crc16,
@@ -166,6 +168,22 @@ control CounterIngress(inout headers hdr,
            HashAlgorithm.crc32,
            (bit<32>) 0,
            {ipAddr1, ipAddr2, port1, port2},
+           (bit<32>) COUNTER_ENTRIES
+        );
+    }*/
+
+    action compute_hashes_direction(ip4Addr_t ipAddr1, ip4Addr_t ipAddr2, udpPort_t port1, udpPort_t port2) {
+        hash(counter_pos_one,
+            HashAlgorithm.crc16,
+            (bit<32>) 0,
+            {ipAddr1, ipAddr2},
+            (bit<32>) COUNTER_ENTRIES
+        );
+
+        hash(counter_pos_two,
+           HashAlgorithm.crc32,
+           (bit<32>) 0,
+           {ipAddr2, ipAddr1},
            (bit<32>) COUNTER_ENTRIES
         );
     }
@@ -242,15 +260,13 @@ control CounterIngress(inout headers hdr,
             else if(hdr.udp.isValid()) {
                 direction = 0;
                 if(check_ports.apply().hit) {
+                    compute_hashes_direction(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.udp.srcPort, hdr.udp.dstPort); // Computes different hashes for a given client
                     if(direction == 1) {
-                        // Computes different hashes for a given client
-                        compute_hashes(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.udp.srcPort, hdr.udp.dstPort);
-
                         if((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_INITIAL)) {
                             counter_1.read(counter_val_one, counter_pos_one);
                             counter_2.read(counter_val_two, counter_pos_two);
 
-                            if(counter_val_one+1 < counter_val_one+1) {
+                            if(counter_val_one+1 < counter_val_two+1) {
                                 aux_min = counter_val_one+1;
                             } else {
                                 aux_min = counter_val_two+1;
@@ -264,21 +280,20 @@ control CounterIngress(inout headers hdr,
                             } else {
                                 // If the threshold is not passed, forward the packet and increment the sketch
                                 counter_1.write(counter_pos_one, counter_val_one+1);
-                                counter_2.write(counter_pos_two, counter_val_two+1);
+                                //counter_2.write(counter_pos_two, counter_val_two+1);
                             }
 
                             if (aux_min > THRESHOLD_WARNING){
                                 clone_packet();
                             }
-
-                        } else if ((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_HANDSHAKE)) {
-                            // When a HANDSHAKE packet is received from the client, decrement the sketch
-                            counter_1.read(counter_val_one, counter_pos_one);
-                            counter_2.read(counter_val_two, counter_pos_two);
-
-                            counter_1.write(counter_pos_one, counter_val_one-1);
-                            counter_2.write(counter_pos_two, counter_val_two-1);
                         }
+                    } else if ((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_HANDSHAKE)) {
+                        // When a HANDSHAKE packet is received from the client, decrement the sketch
+                        counter_1.read(counter_val_one, counter_pos_one);
+                        counter_2.read(counter_val_two, counter_pos_two);
+
+                        //counter_1.write(counter_pos_one, counter_val_one-1);
+                        counter_2.write(counter_pos_one, counter_val_two + 1);
                     }
 
                     // Drop packets from server
