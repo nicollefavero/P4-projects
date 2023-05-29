@@ -1,16 +1,6 @@
 #include <core.p4>
 #include <v1model.p4>
 
-
-/* Define constants for types of packets */
-#define PKT_INSTANCE_TYPE_NORMAL 0
-#define PKT_INSTANCE_TYPE_INGRESS_CLONE 1
-#define PKT_INSTANCE_TYPE_EGRESS_CLONE 2
-#define PKT_INSTANCE_TYPE_COALESCED 3
-#define PKT_INSTANCE_TYPE_INGRESS_RECIRC 4
-#define PKT_INSTANCE_TYPE_REPLICATION 5
-#define PKT_INSTANCE_TYPE_RESUBMIT 6
-
 /* CONSTANTS */
 const bit<16> TYPE_IPV4 = 0x800;
 const bit<8> PROTOCOL_IPV4_UPD = 8w17;
@@ -18,13 +8,11 @@ const bit<8> PROTOCOL_IPV4_TEL = 8w18; //definition for telemetry
 const bit<2> QUIC_LONG_TYPE_HEADER_INITIAL = 2w0;   // 0x00
 const bit<2> QUIC_LONG_TYPE_HEADER_HANDSHAKE = 2w2; // 0x00
 
-//const bit<5> QUIC_LONG_TYPE_HEADER_HANDSHAKE_DONE = 5w30; //0x1e
-
 #define COUNTER_ENTRIES 8
 #define COUNTER_BIT_WIDTH 32
 #define THRESHOLD 10
-#define THRESHOLD_WARNING 5
-
+#define THRESHOLD_2 5
+#define PKT_INSTANCE_TYPE_INGRESS_CLONE 1
 
 const bit<32> TYPE_READ = 0x0606;
 const bit<32> TYPE_SNAPSHOT = 0x0607;
@@ -78,12 +66,18 @@ header quic_long_t {
 header telemetry_t{
     bit<32> type;
     bit<32> sw;
-    bit<32> flowid;
+    bit<32> flowid_1;
+    bit<32> flowid_2;
     bit<32> field;
 }
 
 struct metadata {
-    /* empty ??? */
+    bit<32> connection_state;
+    bit<32> table_input;
+    bit<32> counter_pos_one_f; bit<32> counter_pos_two_f;
+    bit<32> counter_val_one; bit<32> counter_val_two;
+    bit<32> counter_pos_one_b; bit<32> counter_pos_two_b;
+    bit<32> direction;
 }
 
 struct headers {
@@ -147,43 +141,46 @@ control CounterIngress(inout headers hdr,
 
     register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_1;
     register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_2;
-    bit<32> counter_pos_one; bit<32> counter_pos_two;
-    bit<32> counter_val_one; bit<32> counter_val_two;
-    bit<1> direction;
+
     bit<32> aux_min;
 
     action drop() {
         mark_to_drop(standard_metadata);
     }
-    /*
-    action compute_hashes(ip4Addr_t ipAddr1, ip4Addr_t ipAddr2, udpPort_t port1, udpPort_t port2) {
-        hash(counter_pos_one,
-            HashAlgorithm.crc16,
-            (bit<32>) 0,
-            {ipAddr1, ipAddr2, port1, port2},
-            (bit<32>) COUNTER_ENTRIES
-        );
 
-        hash(counter_pos_two,
-           HashAlgorithm.crc32,
-           (bit<32>) 0,
-           {ipAddr1, ipAddr2, port1, port2},
-           (bit<32>) COUNTER_ENTRIES
-        );
-    }*/
+    action clone_packet() {
+      const bit<32> REPORT_MIRROR_SESSION_ID = 500;
+      clone(CloneType.I2E, REPORT_MIRROR_SESSION_ID);
+    }
 
-    action compute_hashes_direction(ip4Addr_t ipAddr1, ip4Addr_t ipAddr2, udpPort_t port1, udpPort_t port2) {
-        hash(counter_pos_one,
+    action compute_hashes_forward(ip4Addr_t ipAddr1, ip4Addr_t ipAddr2) {
+        hash(meta.counter_pos_one_f,
             HashAlgorithm.crc16,
             (bit<32>) 0,
             {ipAddr1, ipAddr2},
             (bit<32>) COUNTER_ENTRIES
         );
 
-        hash(counter_pos_two,
+        hash(meta.counter_pos_two_f,
            HashAlgorithm.crc32,
            (bit<32>) 0,
            {ipAddr2, ipAddr1},
+           (bit<32>) COUNTER_ENTRIES
+        );
+    }
+
+    action compute_hashes_backward(ip4Addr_t ipAddr1, ip4Addr_t ipAddr2) {
+        hash(meta.counter_pos_one_b,
+            HashAlgorithm.crc16,
+            (bit<32>) 0,
+            {ipAddr2, ipAddr1},
+            (bit<32>) COUNTER_ENTRIES
+        );
+
+        hash(meta.counter_pos_two_b,
+           HashAlgorithm.crc32,
+           (bit<32>) 0,
+           {ipAddr1, ipAddr2},
            (bit<32>) COUNTER_ENTRIES
         );
     }
@@ -197,24 +194,6 @@ control CounterIngress(inout headers hdr,
 
     action set_direction(bit<1> dir) {
         direction = dir;
-    }
-
-    action bounce_pkt() {
-        standard_metadata.egress_spec = standard_metadata.ingress_port;
-
-        bit<48> tmpEth = hdr.ethernet.dstAddr;
-        hdr.ethernet.dstAddr = hdr.ethernet.srcAddr;
-        hdr.ethernet.srcAddr = tmpEth;
-
-        bit<32> tmpIp = hdr.ipv4.dstAddr;
-        hdr.ipv4.dstAddr = hdr.ipv4.srcAddr;
-        hdr.ipv4.srcAddr = tmpIp;
-    }
-
-    action clone_packet() {
-        const bit<32> REPORT_MIRROR_SESSION_ID = 500;
-        // Clone from ingress to egress pipeline
-        clone(CloneType.I2E, REPORT_MIRROR_SESSION_ID);
     }
 
     table check_ports {
@@ -250,56 +229,58 @@ control CounterIngress(inout headers hdr,
             ipv4_lpm.apply();
             if(hdr.telemetry.isValid()) {
                  if(hdr.telemetry.type == TYPE_READ){
-                     counter_1.read(hdr.telemetry.field, hdr.telemetry.flowid);
+                     compute_hashes_backward(hdr.telemetry.flowid_1, hdr.telemetry.flowid_2);
+                     counter_2.read(hdr.telemetry.field, meta.counter_pos_one_b);
                      hdr.telemetry.type = TYPE_EXPORT;
                  }
                  if(hdr.telemetry.type == TYPE_UPDATE){
-                     counter_1.write(hdr.telemetry.flowid, hdr.telemetry.field);
+                     counter_1.write(hdr.telemetry.flowid_1, hdr.telemetry.field);
                  }
             }
             else if(hdr.udp.isValid()) {
-                direction = 0;
+                meta.direction = 0;
                 if(check_ports.apply().hit) {
-                    compute_hashes_direction(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.udp.srcPort, hdr.udp.dstPort); // Computes different hashes for a given client
-                    if(direction == 1) {
+                    if(meta.direction == 1) {
+                        // Computes different hashes for a given client
+                        compute_hashes_forward(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr);
+                        counter_1.read(meta.counter_val_one, meta.counter_pos_one_f);
+                        counter_2.read(meta.counter_val_two, meta.counter_pos_two_b);
                         if((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_INITIAL)) {
-                            counter_1.read(counter_val_one, counter_pos_one);
-                            counter_2.read(counter_val_two, counter_pos_two);
 
-                            if(counter_val_one+1 < counter_val_two+1) {
+                            /*
+                            if(counter_val_one+1 < counter_val_one+1) {
                                 aux_min = counter_val_one+1;
                             } else {
                                 aux_min = counter_val_two+1;
-                            }
+                            }*/
 
+                            meta.connection_state = meta.counter_val_one - 2*meta.counter_val_two;
                             // Limits the number of packets coming from the same client
-                            // This is the second threshold
-
-                            if (aux_min > THRESHOLD) {
+                            if (meta.connection_state > THRESHOLD) {
                                 drop();
                             } else {
+                                if (meta.connection_state > THRESHOLD_2){
+                                     clone_packet();
+                                }
                                 // If the threshold is not passed, forward the packet and increment the sketch
-                                counter_1.write(counter_pos_one, counter_val_one+1);
+                                counter_1.write(meta.counter_pos_one_f, meta.counter_val_one+1);
                                 //counter_2.write(counter_pos_two, counter_val_two+1);
                             }
-
-                            if (aux_min > THRESHOLD_WARNING){
-                                clone_packet();
-                            }
                         }
-                    } else if ((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_HANDSHAKE)) {
-                        // When a HANDSHAKE packet is received from the client, decrement the sketch
-                        counter_1.read(counter_val_one, counter_pos_one);
-                        counter_2.read(counter_val_two, counter_pos_two);
-
-                        //counter_1.write(counter_pos_one, counter_val_one-1);
-                        counter_2.write(counter_pos_one, counter_val_two + 1);
                     }
 
                     // Drop packets from server
-                    //if(direction == 0) {
-                    //    drop();
-                    //}
+                    if(meta.direction == 0) {
+                        compute_hashes_backward(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr);
+
+                        counter_1.read(meta.counter_val_one, meta.counter_pos_one_b);
+                        counter_2.read(meta.counter_val_two, meta.counter_pos_two_b);
+                       if ((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_HANDSHAKE)) {
+                            // When a HANDSHAKE packet is received from the client, decrement the sketch
+                            //counter_1.write(counter_pos_one, counter_val_one-1);
+                            counter_2.write(meta.counter_pos_two_b, meta.counter_val_two+1);
+                        }
+                    }
                 }
             }
         }
@@ -310,14 +291,46 @@ control CounterIngress(inout headers hdr,
 control CounterEgress(inout headers hdr,
                inout metadata meta,
                inout standard_metadata_t standard_metadata) {
+
+    bit<32> this_switch_id;
+
+    action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
+        standard_metadata.egress_spec = port;
+        hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
+        hdr.ethernet.dstAddr = dstAddr;
+        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+    }
+
+    action switch_id(bit<32> id){
+        this_switch_id = id;
+    }
+
+
+    table id_exact {
+        key = {
+            meta.table_input : exact;
+        }
+
+        actions = {
+            ipv4_forward;
+            switch_id;
+        }
+        size = 1024;
+    }
+
     apply {
-
-      if (standard_metadata.instance_type == PKT_INSTANCE_TYPE_INGRESS_CLONE) {
-          hdr.telemetry.setValid();
-          hdr.telemetry.type = TYPE_SNAPSHOT;
-          //TODO: take snapshot
-      }
-
+        // In case the "instance type" is a cloned packet, send to the controller
+        if (standard_metadata.instance_type == PKT_INSTANCE_TYPE_INGRESS_CLONE) {
+             hdr.telemetry.setValid();
+             meta.table_input = 100;
+             id_exact.apply();
+             hdr.telemetry.type = TYPE_SNAPSHOT;
+             hdr.telemetry.field = meta.connection_state;
+             hdr.telemetry.sw = this_switch_id;
+             hdr.telemetry.flowid_1 = hdr.ipv4.srcAddr;
+             hdr.telemetry.flowid_2 = hdr.ipv4.dstAddr;
+             hdr.ipv4.protocol = 18;
+        }
     }
 }
 

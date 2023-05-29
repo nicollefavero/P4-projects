@@ -11,6 +11,10 @@ from scapy.all import sniff
 
 from telemetry_header import TelemetryHeader
 
+from warnings import filterwarnings
+filterwarnings("ignore")
+
+
 TYPE_READ = 0x0606
 TYPE_SNAPSHOT = 0x0607
 TYPE_UPDATE = 0x0608
@@ -36,7 +40,7 @@ def get_if():
     return iface
 
 def send_update():
-    print("sending on interface %s" % (iface1))
+    print("sending on interface %s" % (iface))
     pkt =  Ether(src=get_if_hwaddr(iface1), dst='ff:ff:ff:ff:ff:ff')
     pkt = pkt /IP(src="10.50.1.1", dst="10.50.1.6")  / TelemetryHeader(type=TYPE_UPDATE, sw=0, flowid=1, field=0)
     pkt.show2()
@@ -56,36 +60,39 @@ def save_snapshot(pkt):
 
 def read_snapshot(rc_pkt):
     if(rc_pkt[TelemetryHeader].sw == 0):
-        interface = iface1
+        interface = iface
     else:
         interface = iface2
 
-    pkt =  Ether(src=get_if_hwaddr(iface2), dst='ff:ff:ff:ff:ff:ff')
+    pkt =  Ether(src=get_if_hwaddr(interface), dst='ff:ff:ff:ff:ff:ff')
     pkt = pkt / IP(src="10.50.1.1", dst="10.50.1.6") / TelemetryHeader(type=TYPE_READ, sw=1, flowid=1, field=0)
     pkt.show2()
     sendp(pkt, iface=interface, verbose=False)
 
 def handle_pkt(pkt):
-    if(pkt[TelemetryHeader].type == TYPE_SNAPSHOT):
-        print("Got a warning!")
-        save_snapshot(pkt)
-        send_read_snapshot(pkt)
-    elif(pkt[TelemetryHeader].type == TYPE_EXPORT):
-        save_snapshot(pkt)
-        if((snapshot_s2[pkt[TelemetryHeader].flowid] + snapshot_s1[pkt[TelemetryHeader].flowid]) > 10):
-            print("warning")
-        send_update(pkt)
+    print("teste")
+    if(TelemetryHeader in pkt):
+        print("this is telemetry!")
+        if(pkt[TelemetryHeader].type == TYPE_SNAPSHOT):
+            print("Got a warning!")
+            save_snapshot(pkt)
+            read_snapshot(pkt)
+        elif(pkt[TelemetryHeader].type == TYPE_EXPORT):
+            save_snapshot(pkt)
+            if((snapshot_s2[pkt[TelemetryHeader].flowid] + snapshot_s1[pkt[TelemetryHeader].flowid]) > 10):
+                print("warning")
+            send_update(pkt)
 
     sys.stdout.flush()
 
-def receive(iface):
-    iface = iface
-    print("sniffing on %s" % iface)
+def receive(iface_):
+    interface = iface_
+    print("sniffing on %s" % interface)
+    sys.stdout.flush()
 
     build_lfilter = lambda r: TelemetryHeader in r and (r[TelemetryHeader].type == TYPE_SNAPSHOT or r[TelemetryHeader].type == TYPE_EXPORT)
-    print("--- pkt from switch")
-    sniff(lfilter=build_lfilter, iface = iface,
-          prn = lambda x: handle_pkt(x))
+    #sniff(lfilter=build_lfilter, iface = interface, prn = lambda x: handle_pkt(x))
+    sniff(iface = interface, prn = lambda x: handle_pkt(x))
 
 def main():
     receivethread = threading.Thread(target=receive(iface))

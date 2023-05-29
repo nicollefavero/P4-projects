@@ -41,6 +41,16 @@
         "dstAddr": "08:00:00:00:01:11",
         "port": 2
       }
+    },
+    {
+      "table": "CounterEgress.id_exact",
+      "match": {
+        "meta.table_input": 100
+      },
+      "action_name": "CounterEgress.switch_id",
+      "action_params": {
+        "id": 2
+      }
     }
   ]
 }
