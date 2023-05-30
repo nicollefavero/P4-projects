@@ -16,7 +16,8 @@ const bit<2> QUIC_LONG_TYPE_HEADER_HANDSHAKE = 2w2; // 0x00
 
 const bit<32> TYPE_READ = 0x0606;
 const bit<32> TYPE_SNAPSHOT = 0x0607;
-const bit<32> TYPE_UPDATE = 0x0608;
+const bit<32> TYPE_UPDATE_F = 0x0608;
+const bit<32> TYPE_UPDATE_B = 0x0618;
 const bit<32> TYPE_EXPORT = 0x0609;
 
 /* ALTERNATIVE NAME FOR TYPES */
@@ -77,7 +78,7 @@ struct metadata {
     bit<32> counter_pos_one_f; bit<32> counter_pos_two_f;
     bit<32> counter_val_one; bit<32> counter_val_two;
     bit<32> counter_pos_one_b; bit<32> counter_pos_two_b;
-    bit<32> direction;
+    bit<1> direction;
 }
 
 struct headers {
@@ -134,13 +135,14 @@ control CounterVerifyChecksum(inout headers hdr, inout metadata meta) {
     apply { }
 }
 
+
+register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_1;
+register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_2;
+
 /* INGRESS PROCESSING */
 control CounterIngress(inout headers hdr,
                 inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
-
-    register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_1;
-    register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_2;
 
     bit<32> aux_min;
 
@@ -193,7 +195,19 @@ control CounterIngress(inout headers hdr,
     }
 
     action set_direction(bit<1> dir) {
-        direction = dir;
+        meta.direction = dir;
+    }
+
+    action bounce_pkt() {
+        standard_metadata.egress_spec = standard_metadata.ingress_port;
+
+        bit<48> tmpEth = hdr.ethernet.dstAddr;
+        hdr.ethernet.dstAddr = hdr.ethernet.srcAddr;
+        hdr.ethernet.srcAddr = tmpEth;
+
+        bit<32> tmpIp = hdr.ipv4.dstAddr;
+        hdr.ipv4.dstAddr = hdr.ipv4.srcAddr;
+        hdr.ipv4.srcAddr = tmpIp;
     }
 
     table check_ports {
@@ -229,12 +243,21 @@ control CounterIngress(inout headers hdr,
             ipv4_lpm.apply();
             if(hdr.telemetry.isValid()) {
                  if(hdr.telemetry.type == TYPE_READ){
+                     /*reads content from the backward switch. This is only for the case of the backward switch.
+                      Assuming this will not occur for forward switches, since they never trigger a warning   */
                      compute_hashes_backward(hdr.telemetry.flowid_1, hdr.telemetry.flowid_2);
                      counter_2.read(hdr.telemetry.field, meta.counter_pos_one_b);
+                     hdr.telemetry.sw = 2; //hand coded TODO: create a table to config this
                      hdr.telemetry.type = TYPE_EXPORT;
-                 }
-                 if(hdr.telemetry.type == TYPE_UPDATE){
-                     counter_1.write(hdr.telemetry.flowid_1, hdr.telemetry.field);
+                     bounce_pkt();
+                 }else if(hdr.telemetry.type == TYPE_UPDATE_F){
+                     //updates the forward state of the flow
+                     compute_hashes_forward(hdr.telemetry.flowid_1, hdr.telemetry.flowid_2);
+                     counter_1.write(meta.counter_pos_one_f, hdr.telemetry.field);
+                 }else if(hdr.telemetry.type == TYPE_UPDATE_B){
+                     //updates the forward state of the flow
+                     compute_hashes_backward(hdr.telemetry.flowid_1, hdr.telemetry.flowid_2);
+                     counter_2.write(meta.counter_pos_one_b, hdr.telemetry.field);
                  }
             }
             else if(hdr.udp.isValid()) {
@@ -244,9 +267,8 @@ control CounterIngress(inout headers hdr,
                         // Computes different hashes for a given client
                         compute_hashes_forward(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr);
                         counter_1.read(meta.counter_val_one, meta.counter_pos_one_f);
-                        counter_2.read(meta.counter_val_two, meta.counter_pos_two_b);
+                        counter_2.read(meta.counter_val_two, meta.counter_pos_one_b);
                         if((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_INITIAL)) {
-
                             /*
                             if(counter_val_one+1 < counter_val_one+1) {
                                 aux_min = counter_val_one+1;
@@ -268,17 +290,16 @@ control CounterIngress(inout headers hdr,
                             }
                         }
                     }
-
                     // Drop packets from server
                     if(meta.direction == 0) {
                         compute_hashes_backward(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr);
 
-                        counter_1.read(meta.counter_val_one, meta.counter_pos_one_b);
-                        counter_2.read(meta.counter_val_two, meta.counter_pos_two_b);
+                        //counter_1.read(meta.counter_val_one, meta.counter_pos_one_b);
+                        counter_2.read(meta.counter_val_one, meta.counter_pos_one_b);
                        if ((hdr.quic_long.headerForm == 1) && (hdr.quic_long.longPacketType == QUIC_LONG_TYPE_HEADER_HANDSHAKE)) {
                             // When a HANDSHAKE packet is received from the client, decrement the sketch
                             //counter_1.write(counter_pos_one, counter_val_one-1);
-                            counter_2.write(meta.counter_pos_two_b, meta.counter_val_two+1);
+                            counter_2.write(meta.counter_pos_one_b, meta.counter_val_one+1);
                         }
                     }
                 }
@@ -300,6 +321,23 @@ control CounterEgress(inout headers hdr,
         hdr.ethernet.dstAddr = dstAddr;
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
+
+    action compute_hashes_forward(ip4Addr_t ipAddr1, ip4Addr_t ipAddr2) {
+        hash(meta.counter_pos_one_f,
+            HashAlgorithm.crc16,
+            (bit<32>) 0,
+            {ipAddr1, ipAddr2},
+            (bit<32>) COUNTER_ENTRIES
+        );
+
+        hash(meta.counter_pos_two_f,
+           HashAlgorithm.crc32,
+           (bit<32>) 0,
+           {ipAddr2, ipAddr1},
+           (bit<32>) COUNTER_ENTRIES
+        );
+    }
+
 
     action switch_id(bit<32> id){
         this_switch_id = id;
@@ -324,8 +362,10 @@ control CounterEgress(inout headers hdr,
              hdr.telemetry.setValid();
              meta.table_input = 100;
              id_exact.apply();
+             compute_hashes_forward(hdr.ipv4.srcAddr, hdr.ipv4.dstAddr);
+             counter_1.read(meta.counter_val_one, meta.counter_pos_one_f);
              hdr.telemetry.type = TYPE_SNAPSHOT;
-             hdr.telemetry.field = meta.connection_state;
+             hdr.telemetry.field = meta.counter_val_one ;
              hdr.telemetry.sw = this_switch_id;
              hdr.telemetry.flowid_1 = hdr.ipv4.srcAddr;
              hdr.telemetry.flowid_2 = hdr.ipv4.dstAddr;
