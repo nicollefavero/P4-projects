@@ -143,7 +143,7 @@ register<bit<COUNTER_BIT_WIDTH>>(COUNTER_ENTRIES) counter_2;
 control CounterIngress(inout headers hdr,
                 inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
-
+    bit<32> this_switch_id;
     bit<32> aux_min;
 
     action drop() {
@@ -180,7 +180,7 @@ control CounterIngress(inout headers hdr,
         );
 
         hash(meta.counter_pos_two_b,
-           HashAlgorithm.crc32,
+           HashAlgorithm.crc16,
            (bit<32>) 0,
            {ipAddr1, ipAddr2},
            (bit<32>) COUNTER_ENTRIES
@@ -238,6 +238,23 @@ control CounterIngress(inout headers hdr,
         default_action = drop();
     }
 
+    action switch_id(bit<32> id){
+        this_switch_id = id;
+    }
+
+
+    table id_exact {
+        key = {
+            meta.table_input : exact;
+        }
+
+        actions = {
+            ipv4_forward;
+            switch_id;
+        }
+        size = 1024;
+    }
+
     apply {
         if(hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
@@ -246,7 +263,7 @@ control CounterIngress(inout headers hdr,
                      /*reads content from the backward switch. This is only for the case of the backward switch.
                       Assuming this will not occur for forward switches, since they never trigger a warning   */
                      compute_hashes_backward(hdr.telemetry.flowid_1, hdr.telemetry.flowid_2);
-                     counter_2.read(hdr.telemetry.field, meta.counter_pos_one_b);
+                     counter_2.read(hdr.telemetry.field, meta.counter_pos_two_b);
                      hdr.telemetry.sw = 2; //hand coded TODO: create a table to config this
                      hdr.telemetry.type = TYPE_EXPORT;
                      bounce_pkt();
@@ -257,7 +274,7 @@ control CounterIngress(inout headers hdr,
                  }else if(hdr.telemetry.type == TYPE_UPDATE_B){
                      //updates the forward state of the flow
                      compute_hashes_backward(hdr.telemetry.flowid_1, hdr.telemetry.flowid_2);
-                     counter_2.write(meta.counter_pos_one_b, hdr.telemetry.field);
+                     counter_2.write(meta.counter_pos_two_b, hdr.telemetry.field);
                  }
             }
             else if(hdr.udp.isValid()) {
@@ -279,7 +296,11 @@ control CounterIngress(inout headers hdr,
                             meta.connection_state = meta.counter_val_one - 2*meta.counter_val_two;
                             // Limits the number of packets coming from the same client
                             if (meta.connection_state > THRESHOLD) {
-                                drop();
+                                meta.table_input = 100;
+                                id_exact.apply();
+                                //3 works as the entry point in the network a blocks traffic
+                                if(this_switch_id==3)
+                                    drop();
                             } else {
                                 if (meta.connection_state > THRESHOLD_2){
                                      clone_packet();

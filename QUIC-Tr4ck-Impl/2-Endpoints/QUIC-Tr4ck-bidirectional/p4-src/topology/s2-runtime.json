@@ -51,6 +51,16 @@
       "action_params": {
         "id": 2
       }
+    },
+    {
+      "table": "CounterIngress.id_exact",
+      "match": {
+        "meta.table_input": 100
+      },
+      "action_name": "CounterIngress.switch_id",
+      "action_params": {
+        "id": 2
+      }
     }
   ]
 }

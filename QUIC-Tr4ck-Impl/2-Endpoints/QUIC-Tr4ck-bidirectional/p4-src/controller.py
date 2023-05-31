@@ -42,6 +42,7 @@ def get_if():
 
 def send_update(rcv_pkt):
     sum = int(snapshot_s1[rcv_pkt[TelemetryHeader].flowid_2]) - int(snapshot_s2[rcv_pkt[TelemetryHeader].flowid_2])
+    print(sum)
 
     print("sending on interface %s" % (iface))
     pkt =  Ether(src=get_if_hwaddr(iface), dst='ff:ff:ff:ff:ff:ff')
